@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="TEST_NGA">
+
+    <test name="nga_bapp_start_home">
+        <parameter name="yamlFile" value="/test-case-yaml/debugging/nga_bapp_start_home.yaml"/>
+        <classes>
+            <class name="com.cases.AutomatedTest"></class>
+        </classes>
+    </test>
+
+
+    <listeners>
+        <listener class-name="com.config.ExtentTestNGIReporterListener"></listener>
+    </listeners>
+
+</suite>

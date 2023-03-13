@@ -1,0 +1,10 @@
+{
+  "deviceName": "065053715D102533",
+  "platformName": "android",
+  "platformVersion": "11",
+  "appPackage": "team.test",
+  "appActivity": "team.test.Activity",
+  "automationName": "uiautomator2",
+  "newCommandTimeout": "6000",
+  "noReset": false
+}

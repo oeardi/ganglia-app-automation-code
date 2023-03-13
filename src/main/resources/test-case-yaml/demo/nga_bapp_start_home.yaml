@@ -1,0 +1,84 @@
+name: nga_bapp_ussd
+description: nga_bapp_ussd
+steps:
+#  - whiteListFile: ngaBapp
+
+  - page: AppBusinessMainPage
+  - location:
+      - element: "com.android.permissioncontroller:id/permission_allow_foreground_only_button"
+      - way: byId
+      - requisite:
+      - paramType:
+  - action:
+      - operate: click
+      - param:
+
+  - page: AppBusinessMainPage
+  - location:
+      - element: "com.android.permissioncontroller:id/permission_allow_button"
+      - way: byId
+      - requisite:
+      - paramType:
+  - action:
+      - operate: click
+      - param:
+
+  - page: AppBusinessMainPage
+  - location:
+      - element: "team.opay.pay.merchant.service.alpha:id/btnLogin"
+      - way: byId
+      - requisite:
+      - paramType:
+    action:
+      - operate: click
+      - param:
+
+  - page: AppBusinessMainPage
+  - location:
+      - element: "team.opay.pay.merchant.service.alpha:id/layoutMerchant"
+      - way: byId
+      - requisite:
+      - paramType:
+  - action:
+      - operate: click
+      - param:
+
+  - page: AppBusinessMainPage
+  - location:
+      - element: "//*[@text='Enter phone number']"
+      - way: byXpath
+      - requisite: Y
+      - paramType:
+  - action:
+      - operate: sendKeys
+      - param: "2021090893"
+
+  - page: AppBusinessMainPage
+  - location:
+      - element: "//*[@text='Enter 6-digit password']"
+      - way: byXpath
+      - requisite: Y
+      - paramType:
+  - action:
+      - operate: sendKeys
+      - param: "202111"
+
+  - page: AppBusinessMainPage
+  - location:
+      - element: "//*[@text='NEXT']"
+      - way: byXpath
+      - requisite:
+      - paramType:
+  - action:
+      - operate: click
+      - param:
+
+  - page: AppBusinessMainPage
+  - location:
+      - element: "team.opay.pay.merchant.service.alpha:id/actionClose"
+      - way: byId
+      - requisite:
+      - paramType:
+  - action:
+      - operate: click
+      - param:

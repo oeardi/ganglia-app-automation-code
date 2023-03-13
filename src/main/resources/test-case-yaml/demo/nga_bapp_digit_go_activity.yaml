@@ -1,0 +1,33 @@
+name: nga_bapp_ussd
+description: "锁屏页面，输入密码解锁。"
+steps:
+  - action:
+      - operate: digit
+      - param: "202111"
+
+  - page: AppBusinessMainPage
+  - location:
+#      - element: "team.opay.pay.merchant.service.alpha:id/actionClose"
+      - element: "actionClose"
+      - way: byId
+      - requisite:
+      - paramType:
+  - action:
+      - operate: click
+      - param:
+
+  - action:
+      - operate: goActivity
+      - param: "team.opay.pay.oms.home.main.MainContainerActivity"
+
+  - action:
+      - operate: goActivity
+      - param: "team.opay.core.life.airtime.AirtimeDataTopupActivity"
+
+  - action:
+      - operate: goActivity
+      - param: "team.opay.core.life.airtime.AirtimeDataTopupActivity"
+
+  - action:
+      - operate: goActivity
+      - param: "team.opay.pay.oms.home.MainActivity"

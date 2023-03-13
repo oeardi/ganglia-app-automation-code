@@ -1,0 +1,81 @@
+name: test
+description: test_test_test
+steps:
+  ##### App 启动或进入首页面的一些弹框，可以加入 “白名单” 中，由程序统一循环（click）处理。
+  ##### 白名单文件取值：NGA_POS，NGA_BAPP，PAK_POS，PAK_BAPP。示例：[- whiteListFile: ngaBapp]（不区分大小写）
+  #####（注：白名单 Json 文件，存放在 resources/elemnet_white_list 目录下。）
+  - whiteListFile:
+  #####【page】用于日志输出调试时使用，需要在 pages 包下创建一个 java 类文件，名称可自定义。示例：[- page: PosMainPage]
+  - page:
+  ####【location】部分用于 “定位控件”【====================】
+  - location:
+      ### [element] 元素信息（id，xpath，text）
+      - element:
+      ### [way] 取值：（注：way 的所有取值均不区分大小写。）
+      ### byId（或 id）
+      ### byXpath（或 xpath）
+      ### byLinkText
+      ### byText，根据 text 获取元素。示例：[- element: Adjust]
+      ### byClassName
+      - way:
+      ### [requisite] 元素是否必须找到，如果找不到则脚本停止运行。取值：
+      ### Y，必须找到；（不区分大小写）
+      ### 不填或填写其它值，则表示该元素，不是必须要找到。
+      - requisite:
+      ### [paramType] 取 “缓存变量” 的变量类型，当元素没有找到时，取 CacheParamData 类 “缓存变量” 的值。
+      ### 取值：string 参数为字符型；int 参数为整型。示例：[- paramType: int]
+      - paramType:
+  ####【action】部分用于 “执行操作”【====================】
+  - action:
+      ### [operate] 取值：
+      ### click，点击控件元素。
+      ### sendKeys（或 sendkey），输入数据。参数："string"。
+      ### getText，获取元素的 text 值。（会存入 “缓存变量” 中）
+      ### printText，输出 text 元素信息，此 text 通过 getText 获取。
+      ### getList，获取多个元素。param 参数可输入 id、xpath、text，取值示例：[param: "SUCCESS"] 或 [param: //*[@text='Details']]。
+      ### printList，输出 list 元素。
+      ### getListSize，获取元素数量。param 参数可输入 id、xpath、text，取值示例：[param: "success"] 或 [param: //*[@text='Details']]。
+      ### printListSize，输出元素的数量。
+      ### movePoint，滑屏，根据指定的坐标进行移动。参数：startX，startY，endX，endY，示例：param: "0.95 0.8 0.15 0.8"
+      ### moveFixed，滑屏，定长移动，仅需要输入滑动方向。参数：up，down，left，right，示例：param: up
+      ### screenshot，截屏。
+      ### waiting，等待。参数："int"（单位：毫秒）。
+      ### clear，清除控件内容。
+      ### getToast，获取 toast 内容。
+      ### goActivity，跳转到指定的 activity 页面。
+      ### back，调用 android 的返回键。
+      ### digit，调用 android 的 [0 - 9] 数字键。param 输入由 “纯数字” 组成的字符串，如："19920710"
+      ### dataInit，操作数据库进行数据初始化。参数："sql 语句"。
+      - operate:
+      - param:
+  ####【iffi】添加的 if 逻辑（AnalysisLogicProcessUtils 文件的 doIffi() 方法）
+  - iffi:
+      - asserts:
+          ### [resultType] 根据结果的变量类型，在 CacheParamData 类中取缓存数据。参数：param_text，param_int，示例：[resultType: "param_text"]。
+          - resultType:
+          ### [condition] 判断，取值：>，<，=。
+          - condition:
+          ### [expect] 预期结果。
+          - expect:
+  ####【whhw】添加了 whhw 逻辑（AnalysisLogicProcessUtils 文件的 doWhhw() 方法）
+  - whhw:
+      - parameter:
+          ### elements，参数列表。示例：elements: ["element_id1", "element_id2", "element_id3"]，或 element_xpath1，element_xpath2。
+          - elements:
+      - location:
+          - element:
+          - way:
+          - requisite:
+          - paramType:
+      - action:
+          - operate:
+          - param:
+
+  ####【assert】部分用于 “断言”【====================】注：只支持 String 类型。
+  - assert:
+      ### 程序返回的参数类型，取值：string 或 “不填” 时，则程序内处理成 “字符串” 类型。
+      - resultType:
+      ### 判断条件，取值："=="
+      - condition:
+      ### 预期结果，示例："Next"
+      - expect:
