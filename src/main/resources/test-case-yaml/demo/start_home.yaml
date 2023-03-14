@@ -1,0 +1,82 @@
+name: start_home
+description: start_home
+modules:
+  - page: Page
+  - location:
+      - element: "com.android.permissioncontroller:id/only_button"
+      - way: byId
+      - requisite:
+      - paramType:
+  - action:
+      - operate: click
+      - param:
+
+  - page: Page
+  - location:
+      - element: "com.android.permissioncontroller:id/button"
+      - way: byId
+      - requisite:
+      - paramType:
+  - action:
+      - operate: click
+      - param:
+
+  - page: Page
+  - location:
+      - element: "Login"
+      - way: byId
+      - requisite:
+      - paramType:
+    action:
+      - operate: click
+      - param:
+
+  - page: Page
+  - location:
+      - element: "merchant.service.alpha:id/layout"
+      - way: byId
+      - requisite:
+      - paramType:
+  - action:
+      - operate: click
+      - param:
+
+  - page: Page
+  - location:
+      - element: "//*[@text='Enter number']"
+      - way: byXpath
+      - requisite: Y
+      - paramType:
+  - action:
+      - operate: sendKeys
+      - param: "2021090893"
+
+  - page: Page
+  - location:
+      - element: "//*[@text='Enter digit']"
+      - way: byXpath
+      - requisite: Y
+      - paramType:
+  - action:
+      - operate: sendKeys
+      - param: "202111"
+
+  - page: Page
+  - location:
+      - element: "//*[@text='NEXT']"
+      - way: byXpath
+      - requisite:
+      - paramType:
+  - action:
+      - operate: click
+      - param:
+
+  - page: Page
+  - location:
+      - element: "merchant.service.alpha:id/action"
+      - way: byId
+      - requisite:
+      - paramType:
+  - action:
+      - operate: click
+      - param:

@@ -1,0 +1,24 @@
+name: digit_go_activity
+description: "锁屏页面，解锁。"
+modules:
+  - action:
+      - operate: digit
+      - param: "202111"
+
+  - page:
+  - location:
+      - element: "actionClose"
+      - way: byId
+      - requisite:
+      - paramType:
+  - action:
+      - operate: click
+      - param:
+
+  - action:
+      - operate: goActivity
+      - param: "Activity"
+
+  - action:
+      - operate: goActivity
+      - param: "Activity"

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="TEST">
+
+    <test name="air">
+        <parameter name="yamlFile" value="/test-case-yaml/air.yaml"/>
+        <classes>
+            <class name="com.cases.AutomatedTest"></class>
+        </classes>
+    </test>
+
+
+    <listeners>
+        <listener class-name="com.config.ExtentTestNGIReporterListener"></listener>
+    </listeners>
+
+</suite>

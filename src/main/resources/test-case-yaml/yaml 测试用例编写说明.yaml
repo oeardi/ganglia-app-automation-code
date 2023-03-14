@@ -1,0 +1,86 @@
+name: 测试用例名称
+description: 测试用例描述信息，如：在 yaml 文件中编写测试用例，在 xml 文件中运行测试用例。
+modules:
+
+  ###【whiteListFile】说明：
+  ### App 启动或进入首页面的一些弹框，可以加入 “白名单” 中，由程序统一循环（click）处理。
+  ### “白名单” 取值需要自定义，在 AutomationEngineUtils 类和 WhiteListData 类中定义。
+  ###（注：白名单 Json 文件存放在 resources/elemnet_white_list 目录下。）
+  ###（注：原来的 WhiteListData 文件涉及到了一些敏感信息，已删除，待修改之后重新上传。）
+  - whiteListFile:
+
+
+  ###【page】说明：
+  ### 在日志中输出 “操作” 所在的 App 功能页面，在日志中起到标识作用，便于跟踪步骤执行和调试。
+  ### 需要由使用者在在 pages 包下创建一个 Page.java 类文件，名称自定义。示例：[- page: MainPage]
+  - page:
+
+
+  ###【location】说明：
+  ### 定位信息，主要用于描述如何定位一个元素，以及标识该 “元素” 是否是必须元素。（必须元素如果不被找到，则程序强制退出。）
+  - location:
+      ###【element】元素信息（id，xpath，text）
+      - element:
+      ###【way】取值：byId，byXpath，byText，byClassName（注：way 的所有取值均不区分大小写。）
+      ### 示例：[- element: Adjust]
+      - way:
+      ###【requisite】元素是否必须找到，如果找不到则脚本停止运行。取值：
+      ### Y，必须找到；（不区分大小写）不填或填写其它值，则表示该元素，不是必须要找到。
+      - requisite:
+      ###【paramType】取 “缓存变量” 的变量类型，当元素没有找到时，取 CacheParamData 类 “缓存变量” 的值。
+      ### 取值：string 参数为字符型；int 参数为整型。示例：[- paramType: string]
+      - paramType:
+
+
+  ###【action】说明：
+  ### 操作信息，该 “模块” 用于描述测试用例运行过程中，每一步所需要执行的操作。
+  - action:
+      ###【operate】取值：（部分 “operate”（操作）会与 “param”（参数）结合使用。）
+      ### click，点击控件元素。
+      ### sendKeys，输入数据。示例：param: "1234567890"。
+      ### getText，获取元素的 text 值。
+      ### printText，在日志中输出元素的 text 值，此值通过 getText 获取。
+      ### getList，获取多个元素。param 参数可输入 id、xpath、text。示例：param: "SUCCESS"（或 param: //*[@text='Details']）。
+      ### printList，输出 list 元素。
+      ### getListSize，获取元素数量。param 参数可输入 id、xpath、text。示例：param: "success"（或 param: //*[@text='Details']）。
+      ### printListSize，输出元素的数量。
+      ### movePoint，滑屏，根据指定的坐标进行滑屏。param 参数输入 startX，startY，endX，endY。示例：param: "0.95 0.8 0.15 0.8"（空格分割）。
+      ### moveFixed，滑屏，指定方向滑屏，仅需要输入滑动方向。param 参数输入 up，down，left，right。示例：param: "up"。
+      ### screenshot，截屏。
+      ### waiting，等待（单位：毫秒）。示例： param: "5000"
+      ### clear，清除控件内容。
+      ### getToast，获取 Toast 内容。
+      ### goActivity，跳转到指定的 Activity 页面。param 参数输入 Activity。示例：param: "xxxActivity"。
+      ### back，调用系统返回键。
+      ### digit，调用系统 [0 - 9] 数字键。param 输入由 “数字” 组成的字符串。示例：param: "19900710"。
+      ### dataInit，操作数据库进行业务数据初始化。参数："sql 语句"。示例：param: "UPDATE t SET status = '1' where status = '2';"
+      - operate:
+      - param:
+
+
+  ###【whhw】说明：
+  ### 以循环方式执行同质化操作，简化测试用例 yaml 文件内容。
+  - whhw:
+      - parameter:
+          ###【elements】参数列表。示例：elements: [ "id1", "id2", "id3" ]，或 elements: [ "xpath1"，"xpath2" ]。
+          - elements:
+      - location:
+          - element:
+          - way:
+          - requisite:
+          - paramType:
+      - action:
+          - operate:
+          - param:
+
+
+  ###【assert】说明：
+  ### 断言。
+  - assert:
+      ###【resultType】程序返回的参数类型，取值：string 或 “不填” 时，则程序内处理成 “字符串” 类型。
+      ### 示例：resultType: "string"。（注：当前只支持 String 类型（文本）断言。）
+      - resultType:
+      ###【condition】判断条件，取值："="。示例：condition: "="
+      - condition:
+      ###【expect】预期结果，示例：expect: "SUCCESS"
+      - expect:
