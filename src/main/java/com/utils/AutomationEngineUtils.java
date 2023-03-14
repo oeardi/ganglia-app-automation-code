@@ -23,7 +23,7 @@ import static com.utils.LogicAnalysisProcessUtils.doIffi;
 import static com.utils.LogicAnalysisProcessUtils.doWhhw;
 
 /**
- * 解析 ymal 文件内容，根据 “元素” 做相应处理。
+ * 解析 ymal 文件内容，根据 “模块” 做相应处理。
  * 1）whiteList
  * 2）page
  * 3）operate
@@ -89,17 +89,17 @@ public class AutomationEngineUtils {
                         log.info("[调试信息] [uiAtuo] 即将开始执行 switch (whiteListFile.toUpperCase()) 方法，匹配白名单文件：");
                         Reporter.log("【调试信息】 [uiAtuo] 即将开始匹配白名单文件：");
                         switch (whiteListFile.toUpperCase()) {
-                            case NGA_POS:
-                                whiteListFile = NGA_POS_WHITE_LIST_FILE;
+                            case N_P:
+                                whiteListFile = N_P_WHITE_LIST_FILE;
                                 break;
-                            case NGA_BAPP:
-                                whiteListFile = NGA_BAPP_WHITE_LIST_FILE;
+                            case N_B:
+                                whiteListFile = N_B_WHITE_LIST_FILE;
                                 break;
-                            case PAK_POS:
-                                whiteListFile = PAK_POS_WHITE_LIST_FILE;
+                            case P_P:
+                                whiteListFile = P_P_WHITE_LIST_FILE;
                                 break;
-                            case PAK_BAPP:
-                                whiteListFile = PAK_BAPP_WHITE_LIST_FILE;
+                            case P_B:
+                                whiteListFile = P_B_WHITE_LIST_FILE;
                                 break;
                             default:
                                 log.info("[调试信息] [uiAtuo] [default] switch 语句中没有匹配到 [whiteListFile = {}]，请确认 “白名单” 文件是否存在。", whiteListFile);
