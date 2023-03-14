@@ -89,6 +89,9 @@ public class AutomationEngineUtils {
                         log.info("[调试信息] [uiAtuo] 即将开始执行 switch (whiteListFile.toUpperCase()) 方法，匹配白名单文件：");
                         Reporter.log("【调试信息】 [uiAtuo] 即将开始匹配白名单文件：");
                         switch (whiteListFile.toUpperCase()) {
+                            case DEFAULT:
+                                whiteListFile = DEFAULT_WHITE_LIST_FILE;
+                                break;
                             case N_P:
                                 whiteListFile = N_P_WHITE_LIST_FILE;
                                 break;

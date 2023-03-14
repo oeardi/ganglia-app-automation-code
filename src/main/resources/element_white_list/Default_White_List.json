@@ -1,0 +1,10 @@
+{
+  "whiteList": [
+    "com.android.permissioncontroller:id/permission_allow_foreground_only_button",
+    "com.android.permissioncontroller:id/permission_allow_button",
+    "id/btn1",
+    "id/layoutMer",
+    "id/btn2",
+    "id/actionClose"
+  ]
+}

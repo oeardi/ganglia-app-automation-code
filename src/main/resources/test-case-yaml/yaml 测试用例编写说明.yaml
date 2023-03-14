@@ -4,8 +4,8 @@ modules:
 
   ###【whiteListFile】说明：
   ### App 启动或进入首页面的一些弹框，可以加入 “白名单” 中，由程序统一循环（click）处理。
-  ### “白名单” 取值需要自定义，在 AutomationEngineUtils 类和 WhiteListData 类中定义。
-  ### 当前定义的白名单文件名：NP，NB，具体参见 WhiteListData 类文件。
+  ### 如果只有一款 App，则可以使用 default（默认），具体参见 WhiteListData 类文件。示例：whiteListFile: default。
+  ### 如果有多款 App “白名单” 需要自定义名称，在 AutomationEngineUtils 类和 WhiteListData 类中定义。
   ###（注：白名单 Json 文件存放在 resources/elemnet_white_list 目录下。）
   - whiteListFile:
 
