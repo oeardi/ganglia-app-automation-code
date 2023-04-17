@@ -21,7 +21,7 @@ modules:
   - location:
       ###【element】元素信息（id，xpath，text）
       - element:
-      ###【way】取值：byId，byXpath，byText，byClassName（注：way 的所有取值均不区分大小写。）
+      ###【way】取值：byId，byXpath，byText，byClassName，byUiSelector（注：way 的所有取值均不区分大小写。）
       ### 示例：[- element: Adjust]
       - way:
       ###【requisite】元素是否必须找到，如果找不到则脚本停止运行。取值：
@@ -46,12 +46,14 @@ modules:
       ### printListSize，输出元素的数量。
       ### movePoint，滑屏，根据指定的坐标进行滑屏。param 参数输入 startX，startY，endX，endY。示例：param: "0.95 0.8 0.15 0.8"（空格分割）。
       ### moveFixed，滑屏，指定方向滑屏，仅需要输入滑动方向。param 参数输入 up，down，left，right。示例：param: "up"。
+      ### moveUntil，滑屏，向下滑动屏幕，根据 text 查找元素，直到找到为止。找到后点击元素。示例：param: "elementText"。
       ### screenshot，截屏。
       ### waiting，等待（单位：毫秒）。示例： param: "5000"
       ### clear，清除控件内容。
       ### getToast，获取 Toast 内容。
       ### goActivity，跳转到指定的 Activity 页面。param 参数输入 Activity。示例：param: "xxxActivity"。
       ### back，调用系统返回键。
+      ### tab，调用系统 TAB 键。
       ### digit，调用系统 [0 - 9] 数字键。param 输入由 “数字” 组成的字符串。示例：param: "19900710"。
       ### dataInit，操作数据库进行业务数据初始化。参数："sql 语句"。示例：param: "UPDATE t SET status = '1' where status = '2';"
       - operate:

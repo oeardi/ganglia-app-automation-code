@@ -25,8 +25,7 @@ import java.util.List;
 import static com.common.CacheParamData.pageName;
 import static com.common.CacheParamData.screenshotCount;
 import static com.utils.AndroidDriverUtils.driver;
-import static com.utils.BaseLocationUtils.findElement;
-import static com.utils.BaseLocationUtils.myFindElements;
+import static com.utils.BaseLocationUtils.*;
 
 /**
  * Action 部分的操作
@@ -320,6 +319,25 @@ public class BaseActionUtils {
     }
 
     /**
+     * 向下滑动屏幕，根据 text 查找元素，直到找到为止。找到后点击元素。
+     *
+     * @param param
+     */
+    public static void moveUntilAndClick(String param) {
+        log.info("[调试信息] [moveUntil]");
+        Reporter.log("【调试信息】 [moveUntil]");
+
+        if (StringUtils.isEmpty(param)) {
+            log.info("[调试信息] [moveUntil] 传入参数 [element == null]，moveUntil() 方法终止执行。[return;]");
+            return;
+        }
+
+        findElementByUiSelectorWithText(param).click();
+
+        log.info("[调试信息] [moveUntil] 执行完毕。");
+    }
+
+    /**
      * 截屏（如果不指定路径，则图片存储在工程路径下）
      */
     public static void screenshot() {
@@ -479,6 +497,26 @@ public class BaseActionUtils {
         driver.pressKey(new KeyEvent().withKey(AndroidKey.BACK));
 
         log.info("[调试信息] [back] 执行完毕。");
+    }
+
+    /**
+     * Android TAB 键
+     */
+    public static void tab() {
+        log.info("[调试信息] [tab]");
+        Reporter.log("【调试信息】 [tab]");
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        log.info("[调试信息] [tab] 点击 Android 键盘 [TAB] 键");
+        Reporter.log("【调试信息】 [tab] 点击 Android 键盘 [TAB] 键");
+        driver.pressKey(new KeyEvent().withKey(AndroidKey.TAB));
+
+        log.info("[调试信息] [tab] 执行完毕。");
     }
 
     public static void digit(String digit) {

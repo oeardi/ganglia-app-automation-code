@@ -27,6 +27,7 @@ public class BaseLocationData {
         String BY_CLASS_NAME = "BYCLASSNAME";
         String BY_NAME = "BYNAME";
         String BY_LINK_TEXT = "BYLINKTEXT";
+        String BY_UI_SELECTOR = "BYUISELECTOR";
     }
 
 }

@@ -24,12 +24,14 @@ public class BaseActionData {
         String PRINT_ELEMENT_COUNT = "PRINTLISTSIZE";
         String MOVE_COORDINATE = "MOVEPOINT";
         String MOVE_FIXED_LENGTH = "MOVEFIXED";
+        String MOVE_UNTIL = "MOVEUNTIL";
         String SCREENSHOT = "SCREENSHOT";
         String WAITING = "WAITING";
         String CLEAR = "CLEAR";
         String GET_TOAST = "GETTOAST";
         String GO_ACTIVITY = "GOACTIVITY";
         String BACK = "BACK";
+        String TAB = "TAB";
         String DIGIT = "DIGIT";
         String RECORD_START = "RECORDSTART";
         String RECORD_STOP = "RECORDSTOP";

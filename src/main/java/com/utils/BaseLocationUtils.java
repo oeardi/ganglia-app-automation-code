@@ -248,6 +248,39 @@ public class BaseLocationUtils {
     }
 
     /**
+     * 向下滑动屏幕，根据 text 查找元素，直到找到为止。
+     *
+     * @param elementText
+     * @return
+     */
+    public static MobileElement findElementByUiSelectorWithText(String elementText) {
+        log.info("[调试信息] [findElementByUiSelectorWithText]");
+
+        if (StringUtils.isEmpty(elementText)) {
+            log.info("[调试信息] [findElementByUiSelectorWithText] 输入参数 [elementText == null]，findElementByUiSelectorWithText() 方法终止执行。[return null;]");
+            return null;
+        }
+
+        String uiScrollables = "new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text(\"" + elementText + "\").instance(0))";
+        log.info("[调试信息] [findElementByUiSelectorWithText] 输出 uiScrollables：[{}]。", uiScrollables);
+
+        MobileElement mobileElement = driver.findElementByAndroidUIAutomator(uiScrollables);
+        if (null != mobileElement) {
+            log.info("[调试信息] [findElementByUiSelectorWithText] 元素 [{}] 存在。", elementText);
+            Reporter.log("【调试信息】 [findElementByUiSelectorWithText] 元素 [" + elementText + "] 存在。");
+            log.info("[调试信息] [findElementByUiSelectorWithText] 执行完毕。");
+            Reporter.log("[调试信息] [findElementByUiSelectorWithText] 执行完毕。");
+            return mobileElement;
+        }
+
+        log.info("[调试信息] [findElementByUiSelectorWithText] 没有定位到元素，findElementByUiSelectorWithText() 方法即将返回 [mobileElement = null]。");
+        Reporter.log("[调试信息] [findElementByUiSelectorWithText] 没有定位到元素，findElementByUiSelectorWithText() 方法即将返回 [mobileElement = null]。");
+        log.info("[调试信息] [findElementByUiSelectorWithText] 执行完毕。");
+        Reporter.log("[调试信息] [findElementByUiSelectorWithText] 执行完毕。");
+        return mobileElement;
+    }
+
+    /**
      * 获取元素集合
      *
      * @param element

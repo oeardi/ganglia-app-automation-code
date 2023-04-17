@@ -16,7 +16,7 @@ public class CommonData {
     /**
      * 重试查找次数 BaseLocationUtils.findElementWithBy()
      */
-    public static int findElementLoopCount = 0;
+    public static int findElementLoopCount = 2;
     public static long sleepTime = 500;
 
     /**

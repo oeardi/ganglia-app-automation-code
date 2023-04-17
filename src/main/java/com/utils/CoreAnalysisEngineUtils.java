@@ -181,6 +181,16 @@ public class CoreAnalysisEngineUtils {
                     }
                     break;
 
+                case BY_UI_SELECTOR:
+                    log.info("[调试信息] [doLocation] [switch] [BY_UI_SELECTOR] 调用 findElementByUiSelectorWithText({}) 获取元素：", element);
+                    mobileElement = findElementByUiSelectorWithText(element);
+
+                    if (null == mobileElement && isRequisiteFlag == 0) {
+                        log.info("[调试信息] [doLocation] [switch] [BY_UI_SELECTOR] 调用 findElementByUiSelectorWithText() 返回 mobileElement == null。");
+                        estimateRequisiteElement(requisite, BY_UI_SELECTOR);
+                    }
+                    break;
+
                 default:
                     log.info("[调试信息] [doLocation] [default] switch 语句中没有匹配到 [way = {}]，请确认 [yaml] 文件中的 way 元素填写是否正确。", way);
                     Reporter.log("【调试信息】 [doLocation] [default] switch 语句中没有匹配到 [way = " + way + "]，请确认 [yaml] 文件中的 way 元素填写是否正确。");
@@ -399,6 +409,14 @@ public class CoreAnalysisEngineUtils {
                     Reporter.log("【调试信息】 [doAction] [switch] [MOVE_FIXED_LENGTH] 执行完毕。[↑]");
                     break;
 
+                case MOVE_UNTIL:
+                    log.info("[调试信息] [doAction] [switch] [MOVE_UNTIL] 开始执行：[↓]");
+                    Reporter.log("【调试信息】 [doAction] [switch] [MOVE_UNTIL] 开始执行：[↓]");
+                    moveUntilAndClick(paramString);
+                    log.info("[调试信息] [doAction] [switch] [MOVE_UNTIL] 执行完毕。[↑]");
+                    Reporter.log("【调试信息】 [doAction] [switch] [MOVE_UNTIL] 执行完毕。[↑]");
+                    break;
+
                 case SCREENSHOT:
                     log.info("[调试信息] [doAction] [switch] [SCREENSHOT] 开始执行：[↓]");
                     Reporter.log("【调试信息】 [doAction] [switch] [SCREENSHOT] 开始执行：[↓]");
@@ -453,6 +471,14 @@ public class CoreAnalysisEngineUtils {
                     back();
                     log.info("[调试信息] [doAction] [switch] [BACK] 执行完毕。[↑]");
                     Reporter.log("【调试信息】 [doAction] [switch] [BACK] 执行完毕。[↑]");
+                    break;
+
+                case TAB:
+                    log.info("[调试信息] [doAction] [switch] [TAB] 开始执行：[↓]");
+                    Reporter.log("【调试信息】 [doAction] [switch] [TAB] 开始执行：[↓]");
+                    tab();
+                    log.info("[调试信息] [doAction] [switch] [TAB] 执行完毕。[↑]");
+                    Reporter.log("【调试信息】 [doAction] [switch] [TAB] 执行完毕。[↑]");
                     break;
 
                 case DIGIT:
