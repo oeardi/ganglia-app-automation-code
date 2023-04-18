@@ -1,6 +1,5 @@
 package com.utils;
 
-import com.common.CacheParamData;
 import com.pages.base.IPage;
 import io.appium.java_client.MobileElement;
 import lombok.extern.slf4j.Slf4j;
@@ -10,10 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
-import static com.common.BaseIffiData.Asserts.*;
 import static com.common.BaseWhhwData.WHHW_PARAMETER;
-import static com.common.CacheParamData.CacheParam.PARAM_INT;
-import static com.common.CacheParamData.CacheParam.PARAM_STRING;
 import static com.common.CacheParamData.pageName;
 import static com.common.CacheParamData.whhwElementCache;
 import static com.common.CommonData.ContainKeywork.*;
@@ -21,127 +17,12 @@ import static com.utils.CoreAnalysisEngineUtils.doAction;
 import static com.utils.CoreAnalysisEngineUtils.doLocation;
 
 /**
- * 逻辑处理，实现 iffi 和 whhw 相关功能。
+ * 逻辑处理，通过 yaml 文件，实现 while（whhw）功能。
  *
  * @author 冷枫红舞
  */
 @Slf4j
 public class LogicAnalysisProcessUtils {
-
-    /**
-     * 解析 iffi 相关信息
-     *
-     * @param iffiList
-     */
-    public static void doIffi(ArrayList iffiList) {
-        log.info("[调试信息] [{}]", Thread.currentThread().getStackTrace()[1].getMethodName());
-
-        log.info("[调试信息] [doIffi] 输出 [iffi] 部分的相关信息：");
-        log.info("[调试信息] [doIffi] iffiList = {}", iffiList.toString());
-
-        Map<String, Object> assertsMap = (Map<String, Object>) iffiList.get(0);
-        log.info("[调试信息] [doIffi] assertsMap = {}", assertsMap.toString());
-
-        ArrayList assertsList = (ArrayList) assertsMap.get(CONTAINT_asserts);
-        Map<String, Object> map1 = (Map<String, Object>) assertsList.get(0);
-        Map<String, Object> map2 = (Map<String, Object>) assertsList.get(1);
-        Map<String, Object> map3 = (Map<String, Object>) assertsList.get(2);
-
-        /**
-         * 取值
-         */
-        String resultType = (String) map1.get("resultType");
-        String condition = (String) map2.get("condition");
-        String expect = (String) map3.get("expect");
-        /* 调试信息 */
-        log.info("[调试信息] [doIffi] 输出 [asserts] 部分的相关信息：");
-        log.info("[调试信息] [doIffi] resultType = [{}]", resultType);
-        log.info("[调试信息] [doIffi] condition = [{}]", condition);
-        log.info("[调试信息] [doIffi] expect = [{}]", expect);
-
-        /**
-         * 根据 result 的值，判断要比较 String 类型，还是 Int 类型：
-         * 1）如果是 param_text 则为 String 类型，取 CacheParamData.elementText 进行比较；
-         * 2）如果是 param_int 则为 Int 类型，取 CacheParamData.elementInt 进行比较。
-         */
-        if (resultType.equals(PARAM_STRING)) {
-            String stringLeft = CacheParamData.elementText;
-            String stringRight = String.valueOf(expect);
-            log.info("[调试信息] [doIffi] stringLeft = {}", stringLeft);
-            log.info("[调试信息] [doIffi] stringRight = {}", stringRight);
-            /* 判定条件 */
-            if (condition.equals(equals)) {
-                log.info("[调试信息] [doIffi] 触发判定条件：[String.equals()]");
-                if (stringLeft.equals(stringRight)) {
-                    iffiAnalysis(iffiList);
-                }
-            }
-        } else if (resultType.equals(PARAM_INT)) {
-
-            int ingLeft = CacheParamData.elementCount;
-            int intRight = Integer.valueOf(expect);
-            log.info("[调试信息] [doIffi] intLeft = {}", ingLeft);
-            log.info("[调试信息] [doIffi] intRight = {}", intRight);
-
-            /* 判定条件 */
-            if (condition.equals(greateThan)) {
-                log.info("[调试信息] [doIffi] 触发判定条件：[>]");
-                if (ingLeft > intRight) {
-                    iffiAnalysis(iffiList);
-                }
-            } else if (condition.equals(lessThan)) {
-                log.info("[调试信息] [doIffi] 触发判定条件：[<]");
-                if (ingLeft < intRight) {
-                    iffiAnalysis(iffiList);
-                }
-            } else if (condition.equals(equals)) {
-                log.info("[调试信息] [doIffi] 触发判定条件：[=]");
-                if (ingLeft == intRight) {
-                    iffiAnalysis(iffiList);
-                }
-            }
-        }
-    }
-
-    /**
-     * 对 yaml 文件中的 iffi 部分进行解析
-     *
-     * @param iffiList
-     */
-    private static void iffiAnalysis(ArrayList iffiList) {
-        log.info("[调试信息] [{}]", Thread.currentThread().getStackTrace()[1].getMethodName());
-
-        MobileElement mobileElement = null;
-        Iterator iterator = iffiList.iterator();
-        /**
-         * 首先调用一次 iterator.next()，
-         * 先消耗掉：[获取 iffi 中的元素] key: asserts, value: [{result=param_int}, {condition=>}, {expect=0}]
-         */
-        iterator.next();
-        /**
-         * 直接从 “location” 元素开始 while 循环
-         */
-        while (iterator.hasNext()) {
-            Map<String, Object> iffiValueMap = (Map<String, Object>) iterator.next();
-            for (Map.Entry<String, Object> entry : iffiValueMap.entrySet()) {
-                log.info("[调试信息] [iffiAnalysis] ---------- [获取 iffi 中的元素] key: {}, value: {}", entry.getKey(), entry.getValue());
-                /**
-                 * 输出 location 定位信息
-                 */
-                if (entry.getKey().contains(CONTAINT_location)) {
-                    ArrayList locationList = (ArrayList) entry.getValue();
-                    mobileElement = doLocation(locationList);
-                }
-                /**
-                 * 输出 action 操作信息
-                 */
-                if (entry.getKey().contains(CONTAINT_action)) {
-                    ArrayList actionList = (ArrayList) entry.getValue();
-                    doAction(mobileElement, actionList);
-                }
-            }
-        }
-    }
 
     /**
      * 对 yaml 文件中的 whhw 部分进行解析，具体思路描述：

@@ -712,5 +712,13 @@ public class BaseActionUtils {
         return true;
     }
 
+    /**
+     * element 是否存在
+     *
+     * @return
+     */
+    public static boolean isExist() {
+        return true;
+    }
 
 }
