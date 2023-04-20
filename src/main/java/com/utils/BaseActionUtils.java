@@ -74,7 +74,7 @@ public class BaseActionUtils {
         }
 
         log.info("[调试信息] [sendKeys] 输入参数 [keyword = {}]", keyword);
-        Reporter.log("【调试信息】 [sendKeys] 输入参数 [keyword = ]" + keyword);
+        Reporter.log("【调试信息】 [sendKeys] 输入参数 [keyword = " + keyword + "]");
 
         if (null == mobileElement) {
             log.info("[调试信息] [sendKeys] 输入参数 [mobileElement == null]，sendKeys() 方法终止执行。[return;]");
@@ -709,15 +709,6 @@ public class BaseActionUtils {
      * element 是否被选中
      */
     public static boolean isSelected() {
-        return true;
-    }
-
-    /**
-     * element 是否存在
-     *
-     * @return
-     */
-    public static boolean isExist() {
         return true;
     }
 
