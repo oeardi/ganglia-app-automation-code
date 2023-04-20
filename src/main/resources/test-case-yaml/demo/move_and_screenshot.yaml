@@ -1,0 +1,40 @@
+name: move_and_screenshot
+description: move_and_screenshot
+modules:
+  - page: MainPage
+  - location:
+      - element: bt_notice_ok
+      - way: byId
+      - requisite:
+      - paramType:
+  - action:
+      - operate: click
+      - param:
+
+  - action:
+      - operate: waiting
+      - param: "5000"
+
+  - action:
+      - operate: movePoint
+      - param: "0.95 0.8 0.15 0.8"
+
+  - action:
+      - operate: moveFixed
+      - param: "left"
+
+  - action:
+      - operate: moveFixed
+      - param: "down"
+
+  - action:
+      - operate: screenshot
+      - param:
+
+  - action:
+      - operate: screenshot
+      - param:
+
+  - action:
+      - operate: screenshot
+      - param:

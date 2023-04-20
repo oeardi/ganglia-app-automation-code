@@ -50,7 +50,20 @@ public class AutomationEngineUtils {
         Reporter.log("【调试信息】 [uiAtuo] [==========================================================================================]");
         Reporter.log("【调试信息】 [uiAtuo] [测试开始] [↓] [↓] [↓]");
 
-        List modulesList = (List) yamlToMap.get(CONTAINT_modules);
+        // 输出 case_name 信息
+        String caseName = (String) yamlToMap.get(CASE_NAME);
+        log.info("[调试信息] [uiAtuo] 测试用例名称：[{}]", caseName);
+        Reporter.log("【调试信息】 [uiAtuo] 测试用例名称 [page = " + caseName + "]");
+
+        // 输出 description 信息
+        String description = (String) yamlToMap.get(DESCRIPTION);
+        log.info("[调试信息] [uiAtuo] 用例描述信息：[{}]", description);
+        Reporter.log("【调试信息】 [uiAtuo] 用例描述信息 [" + description + "]");
+
+        /**
+         * 解析 modules 部分
+         */
+        List modulesList = (List) yamlToMap.get(MODULES);
         if (null == modulesList) {
             log.info("[调试信息] [uiAtuo] yaml 文件中的 [modules] 无内容，uiAtuo() 方法终止执行。脚本强制停止。");
             Reporter.log("【调试信息】 [uiAtuo] yaml 文件中的 [modules] 无内容，uiAtuo() 方法终止执行。脚本强制停止。");
@@ -118,15 +131,17 @@ public class AutomationEngineUtils {
                 /**
                  * 解析 page 信息
                  */
-                if (entry1.getKey().contains(CONTAINT_page)) {
+                if (entry1.getKey().equals(PAGE)) {
                     pageName = (String) entry1.getValue();
-                    pageObject = BasePagesUtils.getPage(pageName);
+//                    pageObject = BasePagesUtils.getPage(pageName);
+                    log.info("[调试信息] [uiAtuo] 当前页面：[page = {}]", pageName);
+                    Reporter.log("【调试信息】 [uiAtuo] 当前页面 [page = " + pageName + "]");
                 }
 
                 /**
                  * 解析 location 定位信息
                  */
-                if (entry1.getKey().contains(CONTAINT_location)) {
+                if (entry1.getKey().equals(LOCATION)) {
                     ArrayList locationList = (ArrayList) entry1.getValue();
                     mobileElement = doLocation(locationList);
                 }
@@ -134,7 +149,7 @@ public class AutomationEngineUtils {
                 /**
                  * 解析 action 操作信息
                  */
-                if (entry1.getKey().contains(CONTAINT_action)) {
+                if (entry1.getKey().equals(ACTION)) {
                     ArrayList actionList = (ArrayList) entry1.getValue();
                     doAction(mobileElement, actionList);
                 }
@@ -142,7 +157,7 @@ public class AutomationEngineUtils {
                 /**
                  * 解析 iffi 相关信息
                  */
-                if (entry1.getKey().contains(CONTAINT_iffi)) {
+                if (entry1.getKey().equals(IFFI)) {
                     ArrayList iffiList = (ArrayList) entry1.getValue();
                     doIffi(iffiList);
                 }
@@ -150,7 +165,7 @@ public class AutomationEngineUtils {
                 /**
                  * 解析 whhw 相关信息
                  */
-                if (entry1.getKey().contains(CONTAINT_whhw)) {
+                if (entry1.getKey().equals(WHHW)) {
                     ArrayList whhwList = (ArrayList) entry1.getValue();
                     doWhhw(whhwList);
                 }
@@ -158,7 +173,7 @@ public class AutomationEngineUtils {
                 /**
                  * 解析 assert 相关信息
                  */
-                if (entry1.getKey().contains(CONTAINT_assert)) {
+                if (entry1.getKey().equals(ASSERT)) {
                     ArrayList assertList = (ArrayList) entry1.getValue();
                     doAssert(assertList);
                 }

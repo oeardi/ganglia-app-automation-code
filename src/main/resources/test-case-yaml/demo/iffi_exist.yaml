@@ -1,0 +1,50 @@
+case_name: iffi
+description: "在 yaml 中实现 “判断元素是否存在” 逻辑。"
+modules:
+  - page: LoginPage
+
+  - iffi:
+      ### 判断元素是否存在，若元素存在，则继续执行 exist 部分。
+      - exist:
+          - description: "如果 “密码” 控件存在，就输入密码。（就向下执行）"
+          - location:
+              - element: "//*[@text='Enter 6-digit']"
+              - way: byXpath
+
+          - location:
+              - element: "//*[@text='Enter 6-digit']"
+              - way: byXpath
+              - requisite:
+              - paramType:
+          - action:
+              - operate: sendKeys
+              - param: "111111"
+
+  - iffi:
+      - exist:
+          - description: "判断 “密码错误” 提示信息 Incorrect pd. [A.A.I.900018] 是否存在。"
+          - location:
+              - element: error_input
+              - way: byId
+
+          - location:
+              - element: pwdClear
+              - way: byId
+              - requisite:
+              - paramType:
+          - action:
+              - operate: click
+              - param:
+
+  - iffi:
+      - compare:
+
+  - page: AppBusinessLoginPage
+  - location:
+      - element: "//*[@text='Enter 6-digit']"
+      - way: byXpath
+      - requisite:
+      - paramType:
+  - action:
+      - operate: sendKeys
+      - param: "202111"

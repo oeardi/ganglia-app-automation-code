@@ -144,7 +144,7 @@ public class CoreAnalysisEngineUtils {
                     // 判断是否存在，如果元素不存在，则返回 null
                     mobileElement = findElement(element);
 
-                    if (mobileElement == null && isRequisiteFlag == 0) {
+                    if (null == mobileElement && isRequisiteFlag == 0) {
                         log.info("[调试信息] [doLocation] [switch] [BY_ID || BY_XPATH] 调用 findElement() 返回 [mobileElement == null]，[isRequisiteFlag == 0]。");
                         estimateRequisiteElement(requisite, way);
                     }
@@ -244,7 +244,9 @@ public class CoreAnalysisEngineUtils {
      */
     public static void doAction(MobileElement actionMobileElement, ArrayList actionList) {
         log.info("[调试信息] [doAction] 开始执行 doAction(MobileElement actionMobileElement, ArrayList actionList) 方法：");
-        Reporter.log("【调试信息】 [doAction] 开始执行。");
+        log.info("[调试信息] [doAction] 输出 actionMobileElement 参数：{}", actionMobileElement);
+        log.info("[调试信息] [doAction] 输出 actionList 参数：{}", actionList);
+        Reporter.log("【调试信息】 [doAction] 开始执行：");
 
         /**
          * 如果 actionMobileElement 为 null，则会影响到对 “元素” 的操作，例如：click(actionMobileElement); 就会执行失败。

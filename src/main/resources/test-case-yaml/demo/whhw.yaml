@@ -1,0 +1,145 @@
+name: whhw
+description:
+modules:
+  - whhw:
+      - parameter:
+          - elements: [ "permission_allow_foreground_only_button",
+                        "permission_allow_button",
+                        "btnLogin",
+                        "layoutMerchant",
+                        "this_element_is_not_exist" ]
+      - page: StartPage
+      - location:
+          - element:
+          - way: byId
+          - requisite: Y
+          - paramType:
+      - action:
+          - operate: click
+          - param:
+
+  - page: AppBusinessLoginPage
+  - location:
+      - element: "//*[@text='Enter phone number']"
+      - way: byXpath
+      - requisite: Y
+      - paramType:
+  - action:
+      - operate: sendKeys
+      - param: "2021090893"
+
+  - page: LoginPage
+  - location:
+      - element: "//*[@text='Enter 6-digit']"
+      - way: byXpath
+      - requisite: Y
+      - paramType:
+  - action:
+      - operate: sendKeys
+      - param: "202111"
+
+  - action:
+      - operate: waiting
+      - param: "3000"
+
+  - page: MainPage
+  - location:
+      - element: btnClose
+      - way: byId
+      - requisite:
+      - paramType:
+  - action:
+      - operate: click
+      - param:
+
+  - action:
+      - operate: waiting
+      - param: "1000"
+
+  - page: MainPage
+  - location:
+      - element: btnClose
+      - way: byId
+      - requisite:
+      - paramType:
+  - action:
+      - operate: click
+      - param:
+
+  - action:
+      - operate: moveFixed
+      - param: "up"
+
+  - page: MainPage
+  - location:
+      - element: "//*[@text='TV']"
+      - way: byXpath
+      - requisite: Y
+      - paramType:
+  - action:
+      - operate: click
+      - param:
+
+  - page: MainPage
+  - location:
+      - element: "//*[@class='android.widget.EditText']"
+      - way: byXpath
+      - requisite:
+      - paramType:
+  - action:
+      - operate: click
+      - param:
+
+  - action:
+      - operate: waiting
+      - param: "500"
+
+  - whhw:
+      - parameter:
+          - elements: [ "Startimes", "DSTV", "GOTV" ]
+
+      - location:
+          - element: "//*[@class='android.widget.EditText']"
+          - way: byXpath
+          - requisite:
+          - paramType:
+      - action:
+          - operate: click
+          - param:
+
+      - action:
+          - operate: waiting
+          - param: "300"
+
+      - location:
+          - element: "//*[@class='android.widget.EditText']"
+          - way: byXpath
+          - requisite:
+          - paramType:
+      - action:
+          - operate: sendKeys
+          - param:
+
+      - action:
+          - operate: waiting
+          - param: "300"
+
+      - location:
+          - element: tv_name
+          - way: byId
+          - requisite:
+          - paramType:
+      - action:
+          - operate: click
+          - param:
+
+      - action:
+          - operate: back
+          - param:
+      - action:
+          - operate: back
+          - param:
+
+  - action:
+      - operate: waiting
+      - param: "2000"

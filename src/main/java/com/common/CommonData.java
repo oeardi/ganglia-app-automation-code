@@ -46,13 +46,17 @@ public class CommonData {
      * 用于 uiAtuo() 方法，判断 yaml 中是否包含以下字符串，进而进行相应处理。
      */
     public interface ContainKeywork {
-        String CONTAINT_modules = "modules";
-        String CONTAINT_page = "page";
-        String CONTAINT_location = "location";
-        String CONTAINT_action = "action";
-        String CONTAINT_iffi = "iffi";
-        String CONTAINT_whhw = "whhw";
-        String CONTAINT_assert = "assert";
+        String CASE_NAME = "case_name";
+        String DESCRIPTION = "description";
+        String MODULES = "modules";
+        String PAGE = "page";
+        String LOCATION = "location";
+        String ACTION = "action";
+        String IFFI = "iffi";
+        String WHHW = "whhw";
+        String ASSERT = "assert";
+        String EXIST = "exist";
+        String COMPARE  = "compare";
     }
 
 }

@@ -75,6 +75,25 @@ modules:
           - operate:
           - param:
 
+  ###【iffi】说明：
+  ### 偷个懒，就不对元素进行描述了，直接用例子说明吧。
+  - iffi:
+      ### 判断元素是否存在，若元素存在，则继续执行 exist 部分。
+      - exist:
+          - description: "如果 “密码” 控件存在，就输入密码。（就向下执行）"
+          ### 首个 location 用于判断，如果这个元素存在，则执行其他 location 相关内容。
+          - location:
+              - element: "//*[@text='Enter 6-digit']"
+              - way: byXpath
+          ### 如果 “不存在”，以下内容均不会被执行。
+          - location:
+              - element: "//*[@text='Enter 6-digit']"
+              - way: byXpath
+              - requisite:
+              - paramType:
+          - action:
+              - operate: sendKeys
+              - param: "111111"
 
   ###【assert】说明：
   ### 断言。

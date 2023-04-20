@@ -1,0 +1,22 @@
+name: nga_bapp_login
+description: nga_bapp_login
+modules:
+  - page: AppBusinessLoginPage
+  - location:
+      - element: "//*[@text='Enter phone number']"
+      - way: byXpath
+      - requisite: Y
+      - paramType:
+  - action:
+      - operate: sendKeys
+      - param: "2021090893"
+
+  - page: AppBusinessLoginPage
+  - location:
+      - element: "//*[@text='Enter 6-digit password']"
+      - way: byXpath
+      - requisite: Y
+      - paramType:
+  - action:
+      - operate: sendKeys
+      - param: "202111"

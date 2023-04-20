@@ -17,12 +17,116 @@ import static com.utils.CoreAnalysisEngineUtils.doAction;
 import static com.utils.CoreAnalysisEngineUtils.doLocation;
 
 /**
- * 逻辑处理，通过 yaml 文件，实现 while（whhw）功能。
+ * 逻辑处理类。通过 yaml 文件，实现 if（iffi）、while（whhw）的功能。
  *
  * @author 冷枫红舞
  */
 @Slf4j
 public class LogicAnalysisProcessUtils {
+
+    /**
+     * 解析 iffi 相关信息
+     *
+     * @param iffiList
+     */
+    public static void doIffi(ArrayList iffiList) {
+        log.info("[调试信息] [doIffi] 开始执行 doIffi(ArrayList iffiList) 方法：");
+
+        /**
+         * 如果 iffiList 为 null，说明 yaml 文件的 iffi 部分没有内容，所以跳过程序对 iffi 部分的执行。
+         */
+        if (null == iffiList || iffiList.isEmpty()) {
+            log.info("[调试信息] [doIffi] 传入参数 [iffiList == null]，doIffi() 方法终止执行。[return;]");
+            return;
+        }
+
+        MobileElement mobileElement = null;
+
+        Iterator iteratorIffi = iffiList.iterator();
+        while (iteratorIffi.hasNext()) {
+
+            Map<String, Object> iffiMap = (Map<String, Object>) iteratorIffi.next();
+            for (Map.Entry<String, Object> iffiEntry : iffiMap.entrySet()) {
+//                log.info("[调试信息] [doIffi] 打印 [iffiMap] 的内容：[key = {}], [value = {}]", entry1.getKey(), entry1.getValue());
+
+                /**
+                 * 解析 yaml 文件中 iffi -> exist 的数据
+                 */
+                if (iffiEntry.getKey().equals(EXIST)) {
+
+                    if (null != iffiMap.get(EXIST)) {
+                        ArrayList existList = (ArrayList) iffiMap.get(EXIST);
+                        log.info("[调试信息] [doIffi] 打印 [exist] 的值：{}", existList.toString());
+
+                        Iterator iteratorExist = existList.iterator();
+
+                        while (iteratorExist.hasNext()) {
+
+                            Map<String, Object> existMap = (Map<String, Object>) iteratorExist.next();
+                            for (Map.Entry<String, Object> existEntry : existMap.entrySet()) {
+//                                log.info("[调试信息] [doIffi] 打印 [existMap] 的内容：[key = {}], [value = {}]", entry1.getKey(), entry1.getValue());
+
+                                /**
+                                 * 解析 description 信息
+                                 */
+                                if (existEntry.getKey().equals(DESCRIPTION)) {
+                                    String description = (String) existEntry.getValue();
+                                    log.info("[调试信息] [doIffi] if 逻辑描述信息：[{}]", description);
+                                    Reporter.log("【调试信息】 [doIffi] if 逻辑描述信息 [" + description + "]");
+                                }
+
+                                if (existEntry.getKey().equals(LOCATION)) {
+                                    ArrayList arrayList = (ArrayList) existMap.get(LOCATION);
+                                    mobileElement = doLocation(arrayList);
+
+                                    /**
+                                     * 进入 if 逻辑，判断元素是否存在，不存在则 return，存在则继续执行 iffi 其它操作。
+                                     */
+                                    if (null == mobileElement) {
+                                        log.info("[调试信息] [doIffi] 定位元素失败 [mobileElement == null]，doIffi() 方法终止执行。[return;]");
+                                        return;
+                                    } else {
+                                        log.info("[调试信息] [doIffi] 定位元素成功 [mobileElement != null]。");
+                                    }
+                                }
+
+                                /**
+                                 * 解析 action 操作信息
+                                 */
+                                if (existEntry.getKey().equals(ACTION)) {
+                                    ArrayList actionList = (ArrayList) existEntry.getValue();
+                                    doAction(mobileElement, actionList);
+                                }
+
+                            }
+                        }
+                    } else {
+                        log.info("[调试信息] [doIffi] yaml 文件中 [exist] 元素的内容为 [null]，doIffi() 方法终止执行。[return;]");
+                        return;
+                    }
+                }
+
+                /**
+                 * 解析 yaml 文件中 iffi -> compare 的数据
+                 */
+                if (iffiEntry.getKey().equals(COMPARE)) {
+
+                    if (null != iffiMap.get(COMPARE)) {
+                        ArrayList compareList = (ArrayList) iffiMap.get(COMPARE);
+                        log.info("[调试信息] [doIffi] 打印 [compare] 的值：{}", compareList.toString());
+
+                        Iterator iteratorCompare = compareList.iterator();
+                    } else {
+                        log.info("[调试信息] [doIffi] yaml 文件中 [compare] 元素的内容为 [null]，doIffi() 方法终止执行。[return;]");
+                        return;
+                    }
+
+                }
+
+            }
+        }
+
+    }
 
     /**
      * 对 yaml 文件中的 whhw 部分进行解析，具体思路描述：
@@ -66,15 +170,17 @@ public class LogicAnalysisProcessUtils {
                 /**
                  * 解析 page 信息
                  */
-                if (entry.getKey().contains(CONTAINT_page)) {
+                if (entry.getKey().equals(PAGE)) {
                     pageName = (String) entry.getValue();
-                    pageObject = BasePagesUtils.getPage(pageName);
+//                    pageObject = BasePagesUtils.getPage(pageName);
+                    log.info("[调试信息] [whhwAnalysis] 当前页面：[page = {}]", pageName);
+                    Reporter.log("【调试信息】 [whhwAnalysis] 当前页面 [page = " + pageName + "]");
                 }
 
                 /**
                  * 解析 location 定位信息
                  */
-                if (entry.getKey().contains(CONTAINT_location)) {
+                if (entry.getKey().equals(LOCATION)) {
                     ArrayList locationList = (ArrayList) entry.getValue();
                     mobileElement = doLocation(locationList);
                 }
@@ -82,7 +188,7 @@ public class LogicAnalysisProcessUtils {
                 /**
                  * 解析 action 操作信息
                  */
-                if (entry.getKey().contains(CONTAINT_action)) {
+                if (entry.getKey().equals(ACTION)) {
                     ArrayList actionList = (ArrayList) entry.getValue();
                     doAction(mobileElement, actionList);
                 }

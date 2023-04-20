@@ -1,0 +1,90 @@
+name: details_and_assert
+description: details_and_assert
+modules:
+  - page: MainPage
+  - location:
+      - element: com.android.packageinstaller:id/permission_allow_button
+      - way: byId
+      - requisite:
+      - paramType:
+  - action:
+      - operate: click
+      - param:
+
+  - page: MainPage
+  - location:
+      - element: com.android.packageinstaller:id/permission_allow_button
+      - way: byId
+      - requisite:
+      - paramType:
+  - action:
+      - operate: click
+      - param:
+
+  - page: MainPage
+  - location:
+      - element: com.android.packageinstaller:id/permission_allow_button
+      - way: byId
+      - requisite:
+      - paramType:
+  - action:
+      - operate: click
+      - param:
+
+  - page: MainPage
+  - location:
+      - element: bt_notice_ok
+      - way: byId
+      - requisite:
+      - paramType: string
+  - action:
+      - operate: click
+      - param:
+
+  - action:
+      - operate: moveFixed
+      - param: "left"
+
+  - page: MainPage
+  - location:
+      - element: //*[@text='Details']
+      - way: byXpath
+      - requisite: Y
+      - paramType:
+  - action:
+      - operate: click
+      - param:
+
+  - page: DetailsPage
+  - action:
+      - operate: getList
+      - param: "APPROVED"
+
+  - page: DetailsPage
+  - action:
+      - operate: getListSize
+      - param: "APPROVED"
+
+  - page: DetailsPage
+  - location:
+      - element: status
+      - way: byId
+      - requisite:
+      - paramType:
+  - action:
+      - operate: click
+      - param:
+
+  - page: DetailsPage
+  - location:
+      - element: total_amount
+      - way: byId
+      - requisite:
+      - paramType:
+  - action:
+      - operate: getText
+      - param:
+  - assert:
+      - resultType: "string"
+      - condition: "=="
+      - expect: "777.77"

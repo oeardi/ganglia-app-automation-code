@@ -1,0 +1,67 @@
+name: get_text
+description: get_text
+modules:
+  - page: MainPage
+  - location:
+      - element: com.android.packageinstaller:id/permission_allow_button
+      - way: byId
+      - requisite:
+      - paramType:
+  - action:
+      - operate: click
+      - param:
+
+  - page: MainPage
+  - location:
+      - element: com.android.packageinstaller:id/permission_allow_button
+      - way: byId
+      - requisite:
+      - paramType:
+  - action:
+      - operate: click
+      - param:
+
+  - page: MainPage
+  - location:
+      - element: com.android.packageinstaller:id/permission_allow_button
+      - way: byId
+      - requisite:
+      - paramType:
+  - action:
+      - operate: click
+      - param:
+
+  - page: MainPage
+  - location:
+      - element: bt_notice_ok
+      - way: byId
+      - requisite:
+      - paramType: string
+  - action:
+      - operate: click
+      - param:
+
+  - page: MainPage
+  - location:
+      - element: //*[@text='Sale']
+      - way: byXpath
+      - requisite: Y
+      - paramType:
+  - action:
+      - operate: getText
+      - param:
+
+  - page: MainPage
+  - action:
+      - operate: printText
+      - param:
+
+  - page: MainPage
+  - location:
+      - element:
+      - way: byText
+      - requisite:
+      - paramType: string
+  - action:
+      - operate: click
+      - param:
