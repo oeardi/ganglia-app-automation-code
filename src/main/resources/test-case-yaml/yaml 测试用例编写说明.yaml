@@ -83,11 +83,11 @@ modules:
           - description: "如果 “密码” 控件存在，就输入密码。（就向下执行）"
           ### 首个 location 用于判断，如果这个元素存在，则执行其他 location 相关内容。
           - location:
-              - element: "//*[@text='Enter 6-digit']"
+              - element: //*[@text='Enter 6-digit']
               - way: byXpath
           ### 如果 “不存在”，以下内容均不会被执行。
           - location:
-              - element: "//*[@text='Enter 6-digit']"
+              - element: //*[@text='Enter 6-digit']
               - way: byXpath
               - requisite:
               - paramType:

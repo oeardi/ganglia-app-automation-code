@@ -31,12 +31,14 @@ public class LogicAnalysisProcessUtils {
      */
     public static void doIffi(ArrayList iffiList) {
         log.info("[调试信息] [doIffi] 开始执行 doIffi(ArrayList iffiList) 方法：");
+        Reporter.log("【调试信息】 [doIffi] 开始执行 doIffi(ArrayList iffiList) 方法：");
 
         /**
          * 如果 iffiList 为 null，说明 yaml 文件的 iffi 部分没有内容，所以跳过程序对 iffi 部分的执行。
          */
         if (null == iffiList || iffiList.isEmpty()) {
             log.info("[调试信息] [doIffi] 传入参数 [iffiList == null]，doIffi() 方法终止执行。[return;]");
+            Reporter.log("【调试信息】 [doIffi] 传入参数 [iffiList == null]，doIffi() 方法终止执行。[return;]");
             return;
         }
 
@@ -44,6 +46,9 @@ public class LogicAnalysisProcessUtils {
 
         Iterator iteratorIffi = iffiList.iterator();
         while (iteratorIffi.hasNext()) {
+            log.info("[调试信息] [doIffi] [----------------------------------------]");
+            Reporter.log("【调试信息】 [doIffi] [----------------------------------------]");
+            log.info("[调试信息] [whhwAnalysis] [while (iteratorIffi.hasNext())]");
 
             Map<String, Object> iffiMap = (Map<String, Object>) iteratorIffi.next();
             for (Map.Entry<String, Object> iffiEntry : iffiMap.entrySet()) {
@@ -57,6 +62,7 @@ public class LogicAnalysisProcessUtils {
                     if (null != iffiMap.get(EXIST)) {
                         ArrayList existList = (ArrayList) iffiMap.get(EXIST);
                         log.info("[调试信息] [doIffi] 打印 [exist] 的值：{}", existList.toString());
+                        Reporter.log("【调试信息】 [doIffi] 打印 [exist] 的值：" + existList);
 
                         Iterator iteratorExist = existList.iterator();
 
@@ -84,9 +90,11 @@ public class LogicAnalysisProcessUtils {
                                      */
                                     if (null == mobileElement) {
                                         log.info("[调试信息] [doIffi] 定位元素失败 [mobileElement == null]，doIffi() 方法终止执行。[return;]");
+                                        Reporter.log("【调试信息】 [doIffi] 定位元素失败 [mobileElement == null]，doIffi() 方法终止执行。[return;]");
                                         return;
                                     } else {
                                         log.info("[调试信息] [doIffi] 定位元素成功 [mobileElement != null]。");
+                                        Reporter.log("【调试信息】 [doIffi] 定位元素成功 [mobileElement != null]。");
                                     }
                                 }
 
@@ -102,6 +110,7 @@ public class LogicAnalysisProcessUtils {
                         }
                     } else {
                         log.info("[调试信息] [doIffi] yaml 文件中 [exist] 元素的内容为 [null]，doIffi() 方法终止执行。[return;]");
+                        Reporter.log("【调试信息】 [doIffi] yaml 文件中 [exist] 元素的内容为 [null]，doIffi() 方法终止执行。[return;]");
                         return;
                     }
                 }
@@ -114,10 +123,12 @@ public class LogicAnalysisProcessUtils {
                     if (null != iffiMap.get(COMPARE)) {
                         ArrayList compareList = (ArrayList) iffiMap.get(COMPARE);
                         log.info("[调试信息] [doIffi] 打印 [compare] 的值：{}", compareList.toString());
+                        Reporter.log("【调试信息】 [doIffi] 打印 [compare] 的值：" + compareList);
 
                         Iterator iteratorCompare = compareList.iterator();
                     } else {
                         log.info("[调试信息] [doIffi] yaml 文件中 [compare] 元素的内容为 [null]，doIffi() 方法终止执行。[return;]");
+                        Reporter.log("【调试信息】 [doIffi] yaml 文件中 [compare] 元素的内容为 [null]，doIffi() 方法终止执行。[return;]");
                         return;
                     }
 
@@ -126,6 +137,8 @@ public class LogicAnalysisProcessUtils {
             }
         }
 
+        log.info("[调试信息] [doIffi] 执行完毕。");
+        Reporter.log("【调试信息】 [doIffi] 执行完毕。");
     }
 
     /**
@@ -205,6 +218,7 @@ public class LogicAnalysisProcessUtils {
      */
     public static void doWhhw(ArrayList whhwList) {
         log.info("[调试信息] [doWhhw] 开始执行 doWhhw(ArrayList whhwList) 方法：");
+        Reporter.log("【调试信息】 [doWhhw] 开始执行 doWhhw(ArrayList whhwList) 方法：");
 
         /**
          * 如果 whhwList 为 null，说明 yaml 文件的 whhw 部分没有内容，所以跳过程序对 whhw 部分的执行。
