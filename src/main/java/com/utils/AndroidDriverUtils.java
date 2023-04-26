@@ -1,21 +1,28 @@
 package com.utils;
 
 import com.alibaba.fastjson.JSONObject;
-import com.entity.Capabilities;
-import com.entity.RemoteUrl;
+import com.entity.CapabilitiesEntity;
+import com.entity.CommonConfigEntity;
+import com.entity.RemoteUrlEntity;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.openqa.selenium.OutputType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Reporter;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import static com.common.CacheParamData.appPackage;
+import static com.common.CacheParamData.pageName;
 import static com.common.CapabilityData.*;
+import static com.common.CommonData.*;
 
 /**
  * 用于直接获取不同设备的 DesiredCapabilities（真机 & 模拟器）
@@ -35,45 +42,27 @@ public class AndroidDriverUtils {
      */
     public static void initDriver() {
         log.info("[调试信息] [initDriver]");
-
-        driver = getInitDriver();
-
-        if (null == driver) {
-            log.info("[调试信息] [initDriver] 获取 [AndroidDriver == null]");
-        } else {
-            log.info("[调试信息] [initDriver] 初始化 [AndroidDriver] 对象完毕。");
-            Reporter.log("【调试信息】 [initDriver] 初始化 [AndroidDriver] 对象完毕。");
-        }
-
-        log.info("[调试信息] [initDriver] 执行完毕。");
-    }
-
-    /**
-     * 初始化 Driver
-     *
-     * @return
-     */
-    public static AndroidDriver<MobileElement> getInitDriver() {
-        log.info("[调试信息] [getInitDriver] 准别初始化 [AndroidDriver] 对象：");
-
-        AndroidDriver<MobileElement> driver = null;
+        log.info("[调试信息] [initDriver] 准备初始化 AndroidDriver 对象：");
 
         URL url = getUrl();
         if (null == url) {
-            log.info("[调试信息] [getInitDriver] url 为 null，方法返回 null。");
-            return null;
+            log.info("[调试信息] [initDriver] 获取到的 [url == null]，initDriver() 终止执行。[return;]");
+            return;
         }
 
         DesiredCapabilities desiredCapabilities = getDesiredCapabilities();
+
         driver = new AndroidDriver(url, desiredCapabilities);
         if (null == driver) {
-            log.info("[调试信息] [getInitDriver] AndroidDriver 为 null，方法返回 null。");
-            return null;
+            log.info("[调试信息] [initDriver] 获取到的 [driver == null]，initDriver() 终止执行。[return;]");
+            return;
+        } else {
+            log.info("[调试信息] [initDriver] 初始化 [driver] 对象完毕。");
+            Reporter.log("【调试信息】 [initDriver] 初始化 [driver] 对象完毕。");
         }
 
         // implicitlyWait 隐式等待
         driver.manage().timeouts().implicitlyWait(implicitly_wait_time, TimeUnit.SECONDS);
-
 //        String context = driver.getContext();
 //        String pageSource = driver.getPageSource();
 //        String currentPackage = driver.getCurrentPackage();
@@ -83,7 +72,7 @@ public class AndroidDriverUtils {
 //        log.info("[调试信息] [getInitDriver] 打印 [driver.getCurrentPackage() = {}]", currentPackage);
 //        log.info("[调试信息] [getInitDriver] 打印 [driver.currentActivity() = {}]", currentActivity);
 
-        return driver;
+        log.info("[调试信息] [initDriver] 执行完毕。");
     }
 
     /**
@@ -94,7 +83,7 @@ public class AndroidDriverUtils {
     private static URL getUrl() {
         log.info("[调试信息] [getUrl]");
 
-        RemoteUrl remoteUrl = new RemoteUrl();
+        RemoteUrlEntity remoteUrl = new RemoteUrlEntity();
         if (null == remoteUrl) {
             log.info("[调试信息] [getUrl] remoteUrl 为 null，方法返回 null。");
             return null;
@@ -130,7 +119,7 @@ public class AndroidDriverUtils {
         /**
          * capabilities.json 处理
          */
-        Capabilities capabilities = getCapabilitiesWithJsonFile();
+        CapabilitiesEntity capabilities = getCapabilitiesWithJsonFile();
         if (null == capabilities) {
             log.info("[调试信息] [getDesiredCapabilities] capabilities 为 null，方法返回 null。");
             return null;
@@ -142,7 +131,7 @@ public class AndroidDriverUtils {
         }
 
         String platformVersion = capabilities.getPlatformVersion();
-        appPackage = capabilities.getAppPackage();
+        String appPackage = capabilities.getAppPackage();
         String appActivity = capabilities.getAppActivity();
         String automationName = capabilities.getAutomationName();
         String deviceName = capabilities.getDeviceName();
@@ -227,7 +216,7 @@ public class AndroidDriverUtils {
      *
      * @return
      */
-    private static Capabilities getCapabilitiesWithJsonFile() {
+    private static CapabilitiesEntity getCapabilitiesWithJsonFile() {
         log.info("[调试信息] [getCapabilitiesWithJsonFile]");
         ResourceBundleUtils resourceBundleUtils = new ResourceBundleUtils();
         /**
@@ -253,7 +242,7 @@ public class AndroidDriverUtils {
         /**
          * json string 转 JavaBean
          */
-        Capabilities capabilities = JSONObject.parseObject(capJsonString, Capabilities.class);
+        CapabilitiesEntity capabilities = JSONObject.parseObject(capJsonString, CapabilitiesEntity.class);
         if (null == capabilities) {
             log.info("[调试信息] [getCapabilitiesWithJsonFile] capabilities 为 null，getCapabilitiesWithJsonFile() 方法返回 null。");
             return null;
@@ -262,6 +251,95 @@ public class AndroidDriverUtils {
         log.info("[调试信息] [getCapabilitiesWithJsonFile] 返回 capabilities 对象，方法执行完毕。");
 
         return capabilities;
+    }
+
+    private static int screenshotCountQuit = 0;
+
+    /**
+     * 退出，并释放 sessionId。
+     */
+    public static void quitAndScreenshot() {
+        log.info("[调试信息] [quitAndScreenshot]");
+        Reporter.log("【调试信息】 [quitAndScreenshot]");
+
+        try {
+            Thread.sleep(sleepTime);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        String fileFolder = "test-before-quit-screenshot/";
+
+        if (StringUtils.isEmpty(pageName)) {
+            pageName = "InitPage";
+        }
+        String fileName = DateFormatUtils.format(new Date(), "yyyyMMddHHmmss") + "_" + screenshotCountQuit + "_" + pageName + ".png";
+
+        File reportDir = new File(fileFolder);
+        if (!reportDir.exists() && !reportDir.isDirectory()) {
+            reportDir.mkdir();
+        }
+
+        File destFile = new File(fileFolder, fileName);
+        try {
+            if (null != driver) {
+                FileUtils.copyFile(driver.getScreenshotAs(OutputType.FILE).getCanonicalFile(), destFile);
+
+                log.info("[调试信息] [quitAndScreenshot] 截图保存路径：{}{}", fileFolder, fileName);
+                Reporter.log("【调试信息】 [quitAndScreenshot] 截图保存路径：" + fileFolder + fileName);
+
+                screenshotCountQuit++;
+            } else {
+                log.info("[调试信息] [quitAndScreenshot] driver == null.");
+            }
+        } catch (Exception e) {
+            log.info("[调试信息] [quitAndScreenshot] 打印操作元素失败异常信息：{}", e.toString());
+//            throw new WebDriverException();
+        }
+
+        log.info("[调试信息] [quitAndScreenshot] “必要元素” 不存在，程序停止运行。（手动抛出 RuntimeException 异常）");
+        throw new RuntimeException();
+    }
+
+    /**
+     * 关闭 APP，不释放 driver 对象。
+     */
+    public static void closeApp() {
+        log.info("[调试信息] [closeApp]");
+        Reporter.log("【调试信息】 [closeApp]");
+
+        driver.closeApp();
+
+        log.info("[调试信息] [closeApp] 执行完毕。");
+    }
+
+    /**
+     * 从文件读配置，为全局变量赋值。
+     *
+     * @return
+     */
+    public static CommonConfigEntity getCommonConfigEntity() {
+        log.info("[调试信息] [getCommonConfigEntity]");
+
+        JsonFileUtils jsonFileUtils = new JsonFileUtils();
+
+        String jsonString = jsonFileUtils.getStringWithJsonFile("/common_config_data.json");
+
+        CommonConfigEntity commonConfigEntity = JSONObject.parseObject(jsonString, CommonConfigEntity.class);
+
+        findElementLoopCount = commonConfigEntity.getFindElementLoopCount();
+        operateElementLoopCount = commonConfigEntity.getOperateElementLoopCount();
+        sleepTime = commonConfigEntity.getSleepTime();
+
+        log.info("[调试信息] [getCommonConfigEntity] 全局变量 findElementLoopCount = {}", findElementLoopCount);
+        log.info("[调试信息] [getCommonConfigEntity] 全局变量 operateElementLoopCount = {}", operateElementLoopCount);
+        log.info("[调试信息] [getCommonConfigEntity] 全局变量 sleepTime = {}", sleepTime);
+        Reporter.log("【调试信息】 全局变量 findElementLoopCount = [" + findElementLoopCount + "]");
+        Reporter.log("【调试信息】 全局变量 operateElementLoopCount = [" + operateElementLoopCount + "]");
+        Reporter.log("【调试信息】 全局变量 sleepTime = [" + sleepTime + "]");
+
+        log.info("[调试信息] [getCommonConfigEntity] 方法执行完毕，返回 commonConfigEntity 对象。");
+        return commonConfigEntity;
     }
 
 }

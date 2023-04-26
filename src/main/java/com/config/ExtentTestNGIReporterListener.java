@@ -103,7 +103,7 @@ public class ExtentTestNGIReporterListener implements IReporter {
 
         // 生成的路径以及文件名
         String folder = "test-report-output/";
-        String fileName = "TestReport-" + DateFormatUtils.format(new Date(), "yyyyMMddHHmmssSSS") + ".html";
+        String fileName = "TestReport-" + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss") + ".html";
 
         // 文件夹不存在的话进行创建
         File reportDir = new File(folder);

@@ -6,7 +6,7 @@ import lombok.Data;
  * @author 冷枫红舞
  */
 @Data
-public class Capabilities {
+public class CapabilitiesEntity {
     private String deviceName;
     private String platformName;
     private String appPackage;

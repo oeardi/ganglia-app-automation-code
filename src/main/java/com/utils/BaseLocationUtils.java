@@ -13,7 +13,7 @@ import java.util.List;
 
 import static com.common.CommonData.*;
 import static com.utils.AndroidDriverUtils.driver;
-import static com.utils.BaseActionUtils.quit;
+import static com.utils.AndroidDriverUtils.quitAndScreenshot;
 
 /**
  * Location 部分的操作
@@ -24,79 +24,6 @@ import static com.utils.BaseActionUtils.quit;
 public class BaseLocationUtils {
 
     /**
-     * 根据传入 element 参数，判断执行 findById 还是 findByXpath
-     *
-     * @param element
-     * @return
-     */
-    public static MobileElement findElement(String element) {
-        log.info("[调试信息] [findElement]");
-
-        if (StringUtils.isEmpty(element)) {
-            log.info("[调试信息] [findElement] 输入参数 [element == null]，findElement() 方法终止执行。[return null;]");
-            return null;
-        }
-
-        try {
-            Thread.sleep(sleepTime);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        By by = null;
-
-        if (element.startsWith(ID_TAG_1) || element.contains(ID_TAG_2)) {
-            log.info("[调试信息] [findElement] 输出元素定位信息：By.id({})", element);
-            Reporter.log("【调试信息】 [findElement] 输出元素定位信息：By.id(" + element + ")");
-            by = By.id(element);
-        } else if (element.startsWith(XPATH_TAG_1) || element.startsWith(XPATH_TAG_2) || element.startsWith(XPATH_TAG_3)) {
-            log.info("[调试信息] [findElement] 输出元素定位信息：By.xpath({})", element);
-            Reporter.log("【调试信息】 [findElement] 输出元素定位信息：By.xpath(" + element + ")");
-            by = By.xpath(element);
-        } else {
-            log.info("[调试信息] [findElement] 输出元素定位信息：By.id({})", element);
-            Reporter.log("【调试信息】 [findElement] 输出元素定位信息：By.id(" + element + ")");
-            by = By.id(element);
-        }
-
-        /**
-         * 如果 by == null，则直接返回 null。
-         */
-        if (null == by) {
-            log.info("[调试信息] [findElement] 获取到的 [by == null]，findElement() 方法终止执行。[return null;]");
-            return null;
-        }
-
-        MobileElement mobileElement = null;
-        try {
-            mobileElement = findElementWithBy(by);
-
-            if (null != mobileElement) {
-                log.info("[调试信息] [findElement] 元素 [{}] 存在。", element);
-                Reporter.log("【调试信息】 [findElement] 元素 [" + element + "] 存在。");
-                log.info("[调试信息] [findElement] 输出 mobileElement = {}", mobileElement);
-                return mobileElement;
-            }
-        } catch (Exception e) {
-            log.info("[调试信息] [findElement] 元素 [{}] 不存在。", element);
-            Reporter.log("【调试信息】 [findElement] 元素 [" + element + "] 不存在。");
-            log.info("[调试信息] [findElement] 输出 mobileElement = {}", mobileElement);
-
-            /**
-             * 隐式等待：driver.manage().timeouts().implicitlyWait(implicitly_wait_time, TimeUnit.SECONDS);
-             */
-            log.info("[调试信息] [findElement]（注：因在 AndroidDriverUtils 设置了 “隐式等待”，所以当元素不存在时，脚本会停顿一段时间。）");
-
-            log.info("[调试信息] [findElement] 输出查找元素失败的错误日志：{}", e.toString());
-//            e.printStackTrace();
-        }
-
-        log.info("[调试信息] [findElement] 没有通过 [id] 或 [xpath] 匹配到元素，方法返回 [mobileElement == null]。");
-        log.info("[调试信息] [findElement] 执行完毕。");
-        return mobileElement;
-    }
-
-    /**
      * 根据 By，获取元素，底层调用 driver.findElement(by) 方法。
      *
      * @param by
@@ -104,7 +31,7 @@ public class BaseLocationUtils {
      */
     private static MobileElement findElementWithBy(By by) {
         log.info("[调试信息] [findElementWithBy]");
-        Reporter.log("[调试信息] [findElementWithBy]");
+        Reporter.log("【调试信息】 [findElementWithBy]");
         CommonData.isRequisiteFlag = 0;
         MobileElement mobileElement = null;
 
@@ -112,7 +39,7 @@ public class BaseLocationUtils {
             try {
                 Thread.sleep(sleepTime);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
 
             try {
@@ -123,16 +50,17 @@ public class BaseLocationUtils {
                      * 找到元素，“是否找到元素” 标志位置 1。[return mobileElement;]
                      */
                     CommonData.isRequisiteFlag = 1;
-                    log.info("[调试信息] [findElementWithBy] 已定位到元素（mobileElement != null），“是否找到元素” 标志位被赋值为：[isRequisiteFlag = {}]", isRequisiteFlag);
-                    Reporter.log("[调试信息] [findElementWithBy] 已定位到元素（mobileElement != null），“是否找到元素” 标志位被赋值为：[isRequisiteFlag = " + isRequisiteFlag + "]");
+                    log.info("[调试信息] [findElementWithBy] 已定位到元素，[isRequisiteFlag] 标志位（是否找到元素）被赋值为：[{}]", isRequisiteFlag);
+                    Reporter.log("【调试信息】 [findElementWithBy] 已定位到元素，[isRequisiteFlag] 标志位（是否找到元素）被赋值为：[" + isRequisiteFlag + "]");
 
                     return mobileElement;
                 }
             } catch (Exception e) {
+//                log.info("[调试信息] [findElementWithBy] 打印定位元素异常信息：{}", e.toString());
                 int tempNum = findElementLoopCount - i;
                 if (tempNum > 0) {
-                    log.info("[调试信息] [findElementWithBy] 未定位到元素，即将重试 [{}] 次。“是否找到元素” 标志位的值为 [isRequisiteFlag = {}]（应为 0）。", tempNum, isRequisiteFlag);
-                    Reporter.log("[调试信息] [findElementWithBy] 未定位到元素，即将重试 [" + (tempNum) + "] 次。“是否找到元素” 标志位的值为 [isRequisiteFlag = " + isRequisiteFlag + "]（应为 0）。");
+                    log.info("[调试信息] [findElementWithBy] 未定位到元素，即将重试 [{}] 次。[isRequisiteFlag] 标志位（是否找到元素）的值为：[{}]（应为 0）。", tempNum, isRequisiteFlag);
+                    Reporter.log("【调试信息】 [findElementWithBy] 未定位到元素，即将重试 [" + tempNum + "] 次。[isRequisiteFlag] 标志位（是否找到元素）的值为 [" + isRequisiteFlag + "]（应为 0）。");
                 }
             }
         }
@@ -143,10 +71,60 @@ public class BaseLocationUtils {
         Assert.assertEquals(isRequisiteFlag, 0);
 
         log.info("[调试信息] [findElementWithBy] 没有定位到元素，findElementWithBy() 方法即将返回 [mobileElement = {}]。", mobileElement);
-        Reporter.log("[调试信息] [findElementWithBy] 没有定位到元素，findElementWithBy() 方法即将返回 [mobileElement = " + mobileElement + "]。");
+        Reporter.log("【调试信息】 [findElementWithBy] 没有定位到元素，findElementWithBy() 方法即将返回 [mobileElement = " + mobileElement + "]。");
         log.info("[调试信息] [findElementWithBy] 执行完毕。");
-        Reporter.log("[调试信息] [findElementWithBy] 执行完毕。");
+        Reporter.log("【调试信息】 [findElementWithBy] 执行完毕。");
 
+        return mobileElement;
+    }
+
+    /**
+     * 根据传入 element 参数，判断执行 findById 还是 findByXpath
+     *
+     * @param element
+     * @return
+     */
+    public static MobileElement findElementByBase(String element) {
+        log.info("[调试信息] [findElementByBase]");
+
+        if (StringUtils.isEmpty(element)) {
+            log.info("[调试信息] [findElementByBase] 输入参数 [element == null]，findElement() 方法终止执行。[return null;]");
+            return null;
+        }
+
+        By by = null;
+
+        if (element.startsWith(ID_TAG_1) || element.contains(ID_TAG_2)) {
+            log.info("[调试信息] [findElementByBase] 输出元素定位信息：By.id({})", element);
+            Reporter.log("【调试信息】 [findElementByBase] 输出元素定位信息：By.id(" + element + ")");
+            by = By.id(element);
+        } else if (element.startsWith(XPATH_TAG_1) || element.startsWith(XPATH_TAG_2) || element.startsWith(XPATH_TAG_3)) {
+            log.info("[调试信息] [findElementByBase] 输出元素定位信息：By.xpath({})", element);
+            Reporter.log("【调试信息】 [findElementByBase] 输出元素定位信息：By.xpath(" + element + ")");
+            by = By.xpath(element);
+        } else {
+            log.info("[调试信息] [findElementByBase] 输出元素定位信息：By.id({})", element);
+            Reporter.log("【调试信息】 [findElementByBase] 输出元素定位信息：By.id(" + element + ")");
+            by = By.id(element);
+        }
+
+        /**
+         * 如果 by == null，则直接返回 null。
+         */
+        if (null == by) {
+            log.info("[调试信息] [findElementByBase] 获取到的 [by == null]，findElement() 方法结束运行。[return null;]");
+            return null;
+        }
+
+        MobileElement mobileElement = findElementWithBy(by);
+        if (null == mobileElement) {
+            log.info("[调试信息] [findElementByBase] 元素不存在 [element = {}]，findElement() 方法结束运行，[return null;]。", element);
+            Reporter.log("【调试信息】 [findElementByBase] 元素不存在 [element = " + element + "]，findElement() 方法结束运行，[return null;]。");
+            return null;
+        }
+
+        log.info("[调试信息] [findElementByBase] 元素存在 [element = {}]。", element);
+        Reporter.log("【调试信息】 [findElementByBase] 元素存在 [ element = " + element + "]。");
         return mobileElement;
     }
 
@@ -166,12 +144,6 @@ public class BaseLocationUtils {
 
         log.info("[调试信息] [findElementByClassName] 输出元素定位信息 elementClassName = {}", elementClassName);
         Reporter.log("【调试信息】 [findElementByClassName] 输出元素定位信息 elementClassName = " + elementClassName);
-
-        try {
-            Thread.sleep(sleepTime);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         By by = By.className(elementClassName);
 
@@ -199,12 +171,6 @@ public class BaseLocationUtils {
         log.info("[调试信息] [findElementByLinkText] 输出元素定位信息 elementLinkText = {}", elementLinkText);
         Reporter.log("【调试信息】 [findElementByLinkText] 输出元素定位信息 elementLinkText = " + elementLinkText);
 
-        try {
-            Thread.sleep(sleepTime);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         By by = By.linkText(elementLinkText);
 
         log.info("[调试信息] [findElementByLinkText] 即将调用：findElementWithBy(by) 方法。");
@@ -231,12 +197,6 @@ public class BaseLocationUtils {
         String xpathString = "//*[@text='" + elementString + "']";
         log.info("[调试信息] [findElementByText] 输出元素定位信息 xpathString = {}", xpathString);
         Reporter.log("【调试信息】 [findElementByText] 输出元素定位信息 xpathString = " + xpathString);
-
-        try {
-            Thread.sleep(sleepTime);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         By by = By.xpath(xpathString);
 
@@ -294,12 +254,6 @@ public class BaseLocationUtils {
             return null;
         }
 
-        try {
-            Thread.sleep(sleepTime);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         List<String> list = new ArrayList<>();
 
         if (element.startsWith(ID_TAG_1) || element.contains(ID_TAG_2)) {
@@ -329,35 +283,26 @@ public class BaseLocationUtils {
         return list;
     }
 
-
     /**
      * 根据 yaml 文件中的 [requisite] 元素，判断当前控件是否为必须，
-     * 如果是必须，找不到的话就调用 quit() 退出运行。
+     * 如果 requisite= Y，但元素没有被找到，就截屏并退出。
      *
-     * @param requisite
-     * @param findWay
+     * @param mobileElement
+     * @param isRequisiteFlag
+     * @param requisite       是否是 “必要元素” 标志位
      */
-    public static void estimateRequisiteElement(String requisite, String findWay) {
-        log.info("[调试信息] [estimateRequisiteElement]");
-
-        log.info("[调试信息] [estimateRequisiteElement] 打印输入参数：[requisite = {}]，[findWay = {}]。", requisite, findWay);
-        Reporter.log("【调试信息】 [estimateRequisiteElement] 打印输入参数：[requisite = " + requisite + "]，[findWay = " + findWay + "]。");
+    public static void requisiteElementIsExist(MobileElement mobileElement, int isRequisiteFlag, String requisite) {
 
         if (StringUtils.isEmpty(requisite)) {
             requisite = "N";
-            log.info("[调试信息] [estimateRequisiteElement] 传入参数 requisite 为 NULL，为参数赋值 [requisite = N]。");
+            log.info("[调试信息] [requisiteElementIsExist] 赋值 [requisite = N]。");
         }
 
-        /**
-         * 上面的 if 逻辑是摆设，只有这段代码有用。
-         */
-        if (requisite.toUpperCase().equals(_Y)) {
-            log.info("[调试信息] [doLocation] [case BY_ID_EXIST] 调用 if (requisite.equals(_Y))");
-            Reporter.log("【调试信息】 [doLocation] [case BY_ID_EXIST] 调用 if (requisite.equals(_Y))");
-            quit();
+        if (null == mobileElement && isRequisiteFlag == 0 && requisite.toUpperCase().equals(_Y)) {
+            log.info("[调试信息] [requisiteElementIsExist] 赋值 [mobileElement = null], [isRequisiteFlag = 0], [requisite = Y]。");
+            quitAndScreenshot();
         }
 
-        log.info("[调试信息] [estimateRequisiteElement] 执行完毕。");
     }
 
 }

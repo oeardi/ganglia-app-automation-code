@@ -4,9 +4,9 @@ import com.common.BaseActionData;
 import com.common.BaseAssertData;
 import com.common.BaseLocationData;
 import com.common.CacheParamData;
+import com.entity.CapabilitiesEntity;
 import io.appium.java_client.MobileElement;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.testng.Reporter;
 
@@ -18,7 +18,6 @@ import static com.common.BaseActionData.ActionOperate.*;
 import static com.common.BaseLocationData.LOCATION_ELEMENT;
 import static com.common.BaseLocationData.LocationWay.*;
 import static com.common.CacheParamData.CacheParam.PARAM_STRING;
-import static com.common.CacheParamData.appPackage;
 import static com.common.CommonData.isRequisiteFlag;
 import static com.utils.BaseActionDBOperateUtils.dbOperate;
 import static com.utils.BaseActionUtils.*;
@@ -53,10 +52,10 @@ public class CoreAnalysisEngineUtils {
             return null;
         }
 
-        Map<String, Object> elementMap = new HashedMap(16);
-        Map<String, Object> wayMap = new HashedMap(16);
-        Map<String, Object> requisiteMap = new HashedMap(16);
-        Map<String, Object> paramTypeMap = new HashedMap(16);
+        Map<String, Object> elementMap = null;
+        Map<String, Object> wayMap = null;
+        Map<String, Object> requisiteMap = null;
+        Map<String, Object> paramTypeMap = null;
 
         String element = null;
         String way = null;
@@ -125,9 +124,8 @@ public class CoreAnalysisEngineUtils {
         }
 
         if (StringUtils.isEmpty(way)) {
-            log.info("[调试信息] [doLocation] 获取到的 [way == null]，doLocation() 方法终止执行。[程序退出]");
-            Reporter.log("【调试信息】 [doLocation] 获取到的 [way == null]，doLocation() 方法终止执行。[程序退出]");
-            quit();
+            log.info("[调试信息] [doLocation] 获取到的 [way == null]，doLocation() 方法终止执行。[return null;]");
+            Reporter.log("【调试信息】 [doLocation] 获取到的 [way == null]，doLocation() 方法终止执行。[return null;]");
         }
 
         MobileElement mobileElement = null;
@@ -141,54 +139,33 @@ public class CoreAnalysisEngineUtils {
                 case BY_ID:
                 case BY_XPATH:
                     log.info("[调试信息] [doLocation] [switch] [BY_ID || BY_XPATH] 调用 findElement({}) 获取元素：", element);
-                    // 判断是否存在，如果元素不存在，则返回 null
-                    mobileElement = findElement(element);
-
-                    if (null == mobileElement && isRequisiteFlag == 0) {
-                        log.info("[调试信息] [doLocation] [switch] [BY_ID || BY_XPATH] 调用 findElement() 返回 [mobileElement == null]，[isRequisiteFlag == 0]。");
-                        estimateRequisiteElement(requisite, way);
-                    }
+                    mobileElement = findElementByBase(element);
+                    // 判断 “必要元素” 是否存在，不存在则截屏并退出。（存在则什么都不做）
+                    requisiteElementIsExist(mobileElement, isRequisiteFlag, requisite);
                     break;
 
                 case BY_LINK_TEXT:
                     log.info("[调试信息] [doLocation] [switch] [BY_LINK_TEXT] 调用 findElementByLinkText({}) 获取元素：", element);
-
                     mobileElement = findElementByLinkText(element);
-
-                    if (null == mobileElement && isRequisiteFlag == 0) {
-                        log.info("[调试信息] [doLocation] [switch] [BY_LINK_TEXT] 调用 findElementByLinkText() 返回 mobileElement == null。");
-                        estimateRequisiteElement(requisite, BY_LINK_TEXT);
-                    }
+                    requisiteElementIsExist(mobileElement, isRequisiteFlag, requisite);
                     break;
 
                 case BY_TEXT:
                     log.info("[调试信息] [doLocation] [switch] [BY_TEXT] 调用 findElementByText({}) 获取元素：", element);
                     mobileElement = findElementByText(element);  // 判断是否存在，如果元素不存在，则返回 null
-
-                    if (null == mobileElement && isRequisiteFlag == 0) {
-                        log.info("[调试信息] [doLocation] [switch] [BY_TEXT] 调用 findElementByText() 返回 mobileElement == null。");
-                        estimateRequisiteElement(requisite, BY_TEXT);
-                    }
+                    requisiteElementIsExist(mobileElement, isRequisiteFlag, requisite);
                     break;
 
                 case BY_CLASS_NAME:
                     log.info("[调试信息] [doLocation] [switch] [BY_CLASS_NAME] 调用 findElementByClassName({}) 获取元素：", element);
                     mobileElement = findElementByClassName(element);
-
-                    if (null == mobileElement && isRequisiteFlag == 0) {
-                        log.info("[调试信息] [doLocation] [switch] [BY_CLASS_NAME] 调用 findElementByClassName() 返回 mobileElement == null。");
-                        estimateRequisiteElement(requisite, BY_CLASS_NAME);
-                    }
+                    requisiteElementIsExist(mobileElement, isRequisiteFlag, requisite);
                     break;
 
                 case BY_UI_SELECTOR:
                     log.info("[调试信息] [doLocation] [switch] [BY_UI_SELECTOR] 调用 findElementByUiSelectorWithText({}) 获取元素：", element);
                     mobileElement = findElementByUiSelectorWithText(element);
-
-                    if (null == mobileElement && isRequisiteFlag == 0) {
-                        log.info("[调试信息] [doLocation] [switch] [BY_UI_SELECTOR] 调用 findElementByUiSelectorWithText() 返回 mobileElement == null。");
-                        estimateRequisiteElement(requisite, BY_UI_SELECTOR);
-                    }
+                    requisiteElementIsExist(mobileElement, isRequisiteFlag, requisite);
                     break;
 
                 default:
@@ -253,7 +230,7 @@ public class CoreAnalysisEngineUtils {
          */
 //        if (null == actionMobileElement) {
 //            log.info("[调试信息] [doAction] 传入参数 [actionMobileElement == null]，doAction() 方法终止执行。[程序退出]");
-//            quit();
+//            quitAndScreenshot();
 //        }
 
         /**
@@ -269,8 +246,8 @@ public class CoreAnalysisEngineUtils {
             return;
         }
 
-        Map<String, Object> operateMap = new HashedMap(16);
-        Map<String, Object> paramMap = new HashedMap(16);
+        Map<String, Object> operateMap = null;
+        Map<String, Object> paramMap = null;
 
         String operateString = null;
         String paramString = null;
@@ -460,7 +437,12 @@ public class CoreAnalysisEngineUtils {
                     if (null == paramString) {
                         log.info("[调试信息] [doAction] [switch] [GO_ACTIVITY] [yaml] 文件中 [action - param] 元素为 null。");
                     } else {
-                        goActivity(appPackage, paramString);
+                        String appPackage = new CapabilitiesEntity().getAppPackage();
+                        if (StringUtils.isEmpty(appPackage)) {
+                            goActivity(appPackage, paramString);
+                        } else {
+                            log.info("[调试信息] [doAction] [switch] [GO_ACTIVITY] [yaml] 文件中 [action - param] 元素为 null。");
+                        }
                     }
 
                     log.info("[调试信息] [doAction] [switch] [GO_ACTIVITY] 执行完毕。[↑]");

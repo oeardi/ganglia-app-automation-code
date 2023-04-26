@@ -1,6 +1,5 @@
 package com.utils;
 
-import com.pages.base.IPage;
 import io.appium.java_client.MobileElement;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -13,8 +12,9 @@ import java.util.Map;
 
 import static com.common.CacheParamData.pageName;
 import static com.common.CommonData.ContainKeywork.*;
+import static com.common.CommonData.endOfRunWaitingTime;
 import static com.common.WhiteListData.*;
-import static com.utils.BaseActionUtils.quit;
+import static com.utils.AndroidDriverUtils.getCommonConfigEntity;
 import static com.utils.BaseAssertUtils.doAssert;
 import static com.utils.BaseWhiteListUtils.doWhiteList;
 import static com.utils.CoreAnalysisEngineUtils.doAction;
@@ -65,18 +65,19 @@ public class AutomationEngineUtils {
          */
         List modulesList = (List) yamlToMap.get(MODULES);
         if (null == modulesList) {
-            log.info("[调试信息] [uiAtuo] yaml 文件中的 [modules] 无内容，uiAtuo() 方法终止执行。脚本强制停止。");
-            Reporter.log("【调试信息】 [uiAtuo] yaml 文件中的 [modules] 无内容，uiAtuo() 方法终止执行。脚本强制停止。");
-            quit();
+            log.info("[调试信息] [uiAtuo] yaml 文件中的 [modules] 无内容，测试用例停止运行。[return;]");
+            Reporter.log("【调试信息】 [uiAtuo] yaml 文件中的 [modules] 无内容，测试用例停止运行。[return;]");
+            return;
         }
         log.info("[调试信息] [uiAtuo] 输出 [yaml] 文件内容：");
         log.info("[调试信息] [uiAtuo] {}。", modulesList.toString());
 
-        IPage pageObject = null;
+        // 从文件读配置，为全局变量赋值。
+        getCommonConfigEntity();
+
         MobileElement mobileElement = null;
 
         Iterator iterator = modulesList.iterator();
-
         while (iterator.hasNext()) {
             log.info("[调试信息] [uiAtuo] [------------------------------------------------------------------------------------------]");
             Reporter.log("【调试信息】 [uiAtuo] [------------------------------------------------------------------------------------------]");
@@ -181,6 +182,12 @@ public class AutomationEngineUtils {
             }
         }
 
+        try {
+            Thread.sleep(endOfRunWaitingTime);
+            log.info("[调试信息] [uiAtuo] [sleeping = {}]", endOfRunWaitingTime);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         log.info("[调试信息] [uiAtuo] [测试结束] [↑] [↑] [↑]");
         log.info("[调试信息] [uiAtuo] [==========================================================================================]");
         log.info("[调试信息] [uiAtuo] [==========================================================================================]");

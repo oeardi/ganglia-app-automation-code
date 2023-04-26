@@ -10,15 +10,9 @@ import java.util.List;
 public class CacheParamData {
 
     /**
-     * 获取 package，用于跳转 activity
-     */
-    public static String appPackage = null;
-
-    /**
      * pageName 和 screenshotCount 用于截图时的文件名拼接。
      */
     public static String pageName = null;
-    public static int screenshotCount = 0;
 
     /**
      * 缓存变量，缓存 doAction() 方法中，某些操作结果的值。

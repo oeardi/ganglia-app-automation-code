@@ -36,5 +36,6 @@ public class BaseActionData {
         String RECORD_START = "RECORDSTART";
         String RECORD_STOP = "RECORDSTOP";
         String DATA_INIT = "DATAINIT";
+        String GET_SELECT_RESULT = "GET_SELECT_RESULT";
     }
 }

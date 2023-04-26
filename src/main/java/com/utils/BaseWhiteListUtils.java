@@ -10,7 +10,7 @@ import java.util.List;
 
 import static com.common.CommonData.findElementLoopCount;
 import static com.utils.BaseActionUtils.click;
-import static com.utils.BaseLocationUtils.findElement;
+import static com.utils.BaseLocationUtils.findElementByBase;
 
 /**
  * 处理白名单
@@ -46,7 +46,7 @@ public class BaseWhiteListUtils {
             log.info("[调试信息] [doWhiteList] 当前元素 [element = {}]", element);
             Reporter.log("【调试信息】 [doWhiteList] 当前元素 [element = " + element + "]");
 
-            MobileElement mobileElement = findElement(element);
+            MobileElement mobileElement = findElementByBase(element);
             if (mobileElement == null) {
                 log.info("[调试信息] [doWhiteList] 调用 findElement() 返回 [mobileElement == null]，没有找到元素。");
             } else {

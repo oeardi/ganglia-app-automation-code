@@ -13,11 +13,14 @@ public class CommonData {
     public static final String XPATH_TAG_3 = "//";
     public static final String XPATH_TAG_2 = "//.";
 
-    /**
-     * 重试查找次数 BaseLocationUtils.findElementWithBy()
-     */
-    public static int findElementLoopCount = 2;
-    public static long sleepTime = 500;
+    // 元素查找失败时，重试查找次数。
+    public static int findElementLoopCount = 0;
+    // 元素操作失败时，重试操作次数。
+    public static int operateElementLoopCount = 0;
+    // 全局等待时间
+    public static long sleepTime = 0;
+
+    public static long endOfRunWaitingTime = 10000;
 
     /**
      * 用于获取 toast（注：必须使用 by xpath 方式。 ）
@@ -35,14 +38,6 @@ public class CommonData {
     public static final String _Y = "Y";
 
     /**
-     * 等待时间（超时时间）单位：秒
-     */
-    public interface CacheExpireTime {
-        long WAIT_TIME_30 = 30;
-        long WAIT_TIME_60 = 60;
-    }
-
-    /**
      * 用于 uiAtuo() 方法，判断 yaml 中是否包含以下字符串，进而进行相应处理。
      */
     public interface ContainKeywork {
@@ -56,7 +51,7 @@ public class CommonData {
         String WHHW = "whhw";
         String ASSERT = "assert";
         String EXIST = "exist";
-        String COMPARE  = "compare";
+        String COMPARE = "compare";
     }
 
 }

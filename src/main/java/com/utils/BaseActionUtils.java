@@ -23,7 +23,8 @@ import java.util.Date;
 import java.util.List;
 
 import static com.common.CacheParamData.pageName;
-import static com.common.CacheParamData.screenshotCount;
+import static com.common.CommonData.operateElementLoopCount;
+import static com.common.CommonData.sleepTime;
 import static com.utils.AndroidDriverUtils.driver;
 import static com.utils.BaseLocationUtils.*;
 
@@ -53,7 +54,23 @@ public class BaseActionUtils {
             return;
         }
 
-        mobileElement.click();
+        for (int i = 0; i <= operateElementLoopCount; i++) {
+            /**
+             * org.openqa.selenium.WebDriverException
+             */
+            try {
+                mobileElement.click();
+                return;
+
+            } catch (Exception e) {
+//                log.info("[调试信息] [click] 打印操作元素失败异常信息：{}", e.toString());
+                int tempNum = operateElementLoopCount - i;
+                if (tempNum > 0) {
+                    log.info("[调试信息] [click] 操作元素失败，即将重试 [{}] 次。", tempNum);
+                    Reporter.log("[调试信息] [click] 操作元素失败，即将重试 [" + tempNum + "] 次。");
+                }
+            }
+        }
 
         log.info("[调试信息] [click] 执行完毕。");
     }
@@ -81,7 +98,12 @@ public class BaseActionUtils {
             return;
         }
 
-        mobileElement.sendKeys(keyword);
+        try {
+            mobileElement.sendKeys(keyword);
+            return;
+        } catch (Exception e) {
+            log.info("[调试信息] [sendKeys] 打印操作元素失败异常信息：{}", e.toString());
+        }
 
         log.info("[调试信息] [sendKeys] 执行完毕。");
     }
@@ -113,7 +135,6 @@ public class BaseActionUtils {
 
         return string;
     }
-
 
     /**
      * 返回根据 element 找到的所有元素
@@ -337,23 +358,24 @@ public class BaseActionUtils {
         log.info("[调试信息] [moveUntil] 执行完毕。");
     }
 
+    private static int screenshotCount = 0;
+
     /**
      * 截屏（如果不指定路径，则图片存储在工程路径下）
      */
     public static void screenshot() {
         log.info("[调试信息] [screenshot]");
         Reporter.log("【调试信息】 [screenshot]");
-        log.info("[调试信息] [screenshot] 屏幕截图保存在 test-screenshot/ 目录下。");
-        Reporter.log("【调试信息】 [screenshot] 屏幕截图保存在 test-screenshot/ 目录下。");
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(sleepTime);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
+        // 屏幕截图保存在 test-screenshot/ 目录下
         String fileFolder = "test-screenshot/";
-        String fileName = screenshotCount + "_" + pageName + "_" + DateFormatUtils.format(new Date(), "yyyyMMddHHmmssSSS") + ".png";
+        String fileName = DateFormatUtils.format(new Date(), "yyyyMMddHHmmss") + "_" + screenshotCount + "_" + pageName + ".png";
 
         File reportDir = new File(fileFolder);
         if (!reportDir.exists() && !reportDir.isDirectory()) {
@@ -370,8 +392,8 @@ public class BaseActionUtils {
 
         screenshotCount++;
 
-        log.info("[调试信息] [screenshot] 输出截图文件名：{}", fileName);
-        Reporter.log("【调试信息】 [screenshot] 输出截图文件名：" + fileName);
+        log.info("[调试信息] [screenshot] 截图保存路径：{}{}", fileFolder, fileName);
+        Reporter.log("【调试信息】 [screenshot] 截图保存路径：" + fileFolder + fileName);
 
         log.info("[调试信息] [screenshot] 执行完毕。");
     }
@@ -431,7 +453,7 @@ public class BaseActionUtils {
         log.info("[调试信息] [getToast]");
         Reporter.log("【调试信息】 [getToast]");
 
-        MobileElement mobileElement = findElement(CommonData.TOAST_XPATH_STRING);
+        MobileElement mobileElement = findElementByBase(CommonData.TOAST_XPATH_STRING);
 
         String toastText = mobileElement.getText();
 
@@ -638,57 +660,6 @@ public class BaseActionUtils {
 
 
         log.info("[调试信息] [recordStop] 执行完毕。");
-    }
-
-    /**
-     * 退出，并释放 sessionId。
-     */
-    public static void quit() {
-        log.info("[调试信息] [quit]");
-        Reporter.log("【调试信息】 [quit]");
-
-        String fileFolder = "test-before-quit-screenshot/";
-
-        if (StringUtils.isEmpty(pageName)) {
-            pageName = "InitPage";
-        }
-        String fileName = "quit" + "_" + pageName + "_" + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss") + ".png";
-
-        File reportDir = new File(fileFolder);
-        if (!reportDir.exists() && !reportDir.isDirectory()) {
-            reportDir.mkdir();
-        }
-
-        File file = new File(fileFolder, fileName);
-
-        try {
-            FileUtils.copyFile(driver.getScreenshotAs(OutputType.FILE).getCanonicalFile(), file);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        log.info("[调试信息] [quit] 输出截图文件名：{}", fileName);
-        Reporter.log("【调试信息】 [quit] 输出截图文件名：" + fileName);
-
-        log.info("[调试信息] [quit] 退出前截图，图片保存在 {} 目录下。", fileFolder);
-        Reporter.log("【调试信息】 [quit] 退出前截图，图片保存在 " + fileFolder + " 目录下。");
-
-        driver.quit();
-        log.info("[调试信息] [quit] 执行完毕。（已释放 sessionId）");
-
-        throw new RuntimeException();
-    }
-
-    /**
-     * 关闭 APP，不释放 driver 对象。
-     */
-    public static void closeApp() {
-        log.info("[调试信息] [closeApp]");
-        Reporter.log("【调试信息】 [closeApp]");
-
-        driver.closeApp();
-
-        log.info("[调试信息] [closeApp] 执行完毕。");
     }
 
     /**

@@ -2,7 +2,6 @@ package com.utils;
 
 import com.common.BaseAssertData;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.testng.Assert;
 import org.testng.Reporter;
@@ -31,9 +30,9 @@ public class BaseAssertUtils {
             return;
         }
 
-        Map<String, Object> resultTypeMap = new HashedMap(16);
-        Map<String, Object> conditionMap = new HashedMap(16);
-        Map<String, Object> expectMap = new HashedMap(16);
+        Map<String, Object> resultTypeMap = null;
+        Map<String, Object> conditionMap = null;
+        Map<String, Object> expectMap = null;
 
         String resultTypeString = null;
         String conditionString = null;
