@@ -18,6 +18,7 @@ import static com.common.BaseActionData.ActionOperate.*;
 import static com.common.BaseLocationData.LOCATION_ELEMENT;
 import static com.common.BaseLocationData.LocationWay.*;
 import static com.common.CacheParamData.CacheParam.PARAM_STRING;
+import static com.common.CacheParamData.selectResultCacheString;
 import static com.common.CommonData.isRequisiteFlag;
 import static com.utils.BaseActionDBOperateUtils.dbOperate;
 import static com.utils.BaseActionUtils.*;
@@ -311,8 +312,23 @@ public class CoreAnalysisEngineUtils {
                         paramString = CacheParamData.whhwElementCache;
                     }
                     sendKeys(actionMobileElement, paramString);
+
                     log.info("[调试信息] [doAction] [switch] [SEND_KEYS] 执行完毕。[↑]");
                     Reporter.log("【调试信息】 [doAction] [switch] [SEND_KEYS] 执行完毕。[↑]");
+                    break;
+
+                case SEND_SELECT_RESULT:
+                    log.info("[调试信息] [doAction] [switch] [SEND_SELECT_RESULT] 开始执行：[↓]");
+                    Reporter.log("【调试信息】 [doAction] [switch] [SEND_SELECT_RESULT] 开始执行：[↓]");
+
+                    if (StringUtils.isEmpty(selectResultCacheString)) {
+                        log.info("[调试信息] [switch] [SEND_SELECT_RESULT] sql 缓存变量为 null，不执行 sendKeys(actionMobileElement, selectResultCacheString) 方法。");
+                    } else {
+                        sendKeys(actionMobileElement, selectResultCacheString);
+                    }
+
+                    log.info("[调试信息] [doAction] [switch] [SEND_SELECT_RESULT] 执行完毕。[↑]");
+                    Reporter.log("【调试信息】 [doAction] [switch] [SEND_SELECT_RESULT] 执行完毕。[↑]");
                     break;
 
                 case GET_ELEMENT_TEXT:
@@ -469,6 +485,18 @@ public class CoreAnalysisEngineUtils {
                     log.info("[调试信息] [doAction] [switch] [DIGIT] 开始执行：[↓]");
                     Reporter.log("【调试信息】 [doAction] [switch] [DIGIT] 开始执行：[↓]");
                     digit(paramString);
+                    log.info("[调试信息] [doAction] [switch] [DIGIT] 执行完毕。[↑]");
+                    Reporter.log("【调试信息】 [doAction] [switch] [DIGIT] 执行完毕。[↑]");
+                    break;
+
+                case DIGIT_SELECT_RESULT:
+                    log.info("[调试信息] [doAction] [switch] [DIGIT_SELECT_RESULT] 开始执行：[↓]");
+                    Reporter.log("【调试信息】 [doAction] [switch] [DIGIT_SELECT_RESULT] 开始执行：[↓]");
+                    if (StringUtils.isEmpty(selectResultCacheString)) {
+                        log.info("[调试信息] [switch] [DIGIT_SELECT_RESULT] sql 缓存变量为 null，不执行 digit(selectResultCacheString) 方法。");
+                    } else {
+                        digit(selectResultCacheString);
+                    }
                     log.info("[调试信息] [doAction] [switch] [DIGIT] 执行完毕。[↑]");
                     Reporter.log("【调试信息】 [doAction] [switch] [DIGIT] 执行完毕。[↑]");
                     break;

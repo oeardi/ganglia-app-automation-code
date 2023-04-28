@@ -3,12 +3,14 @@ package com.utils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.testng.Reporter;
+import org.testng.annotations.Test;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import static com.common.CacheParamData.selectResultCacheString;
 import static com.utils.JdbcUtils.getConnection;
 import static com.utils.JdbcUtils.getStatement;
 
@@ -30,7 +32,7 @@ public class BaseActionDBOperateUtils {
     }
 
     /**
-     * 根据传入的 sql 语句，执行数据库操作。
+     * 数据库操作
      *
      * @param sql
      */
@@ -39,12 +41,12 @@ public class BaseActionDBOperateUtils {
         Reporter.log("【调试信息】 [dbOperate]");
 
         if (StringUtils.isEmpty(sql)) {
-            log.info("[调试信息] [dbOperate] 传入的 SQL 语句为 NULL，dbOperate() 方法终止执行。[return;]");
-            Reporter.log("【调试信息】 [dbOperate] 传入的 SQL 语句为 NULL，dbOperate() 方法终止执行。[return;]");
+            log.info("[调试信息] [dbOperate] 传入的 SQL 为 null，dbOperate() 方法终止执行。[return;]");
+            Reporter.log("【调试信息】 [dbOperate] 传入的 SQL 为 null，dbOperate() 方法终止执行。[return;]");
             return;
         }
-        log.info("[调试信息] [dbOperate] 传入的 SQL 语句为：[{}]", sql);
-        Reporter.log("【调试信息】 [dbOperate] 传入的 SQL 语句为：[" + sql + "]");
+        log.info("[调试信息] [dbOperate] 传入的 SQL 为：[{}]", sql);
+        Reporter.log("【调试信息】 [dbOperate] 传入的 SQL 为：[" + sql + "]");
 
         if (sql.startsWith("insert") || sql.startsWith("INSERT")) {
             insert(sql);
@@ -58,9 +60,11 @@ public class BaseActionDBOperateUtils {
         } else if (sql.startsWith("select") || sql.startsWith("SELECT")) {
             select(sql);
 //            log.info("[调试信息] [dbOperate][select] SQL 执行完毕。[{}]", sql);
+        } else if (sql.contains("@")) {
+            selectOne(sql);
         } else {
-            log.info("[调试信息] [dbOperate] 传入的 SQL 语句不是 [增、删、改、查] 功能，dbOperate() 方法终止执行。[return;]");
-            Reporter.log("【调试信息】 [dbOperate] 传入的 SQL 语句不是 [增、删、改、查] 功能，dbOperate() 方法终止执行。[return;]");
+            log.info("[调试信息] [dbOperate] 传入的 SQL 不是 [增、删、改、查] 功能，dbOperate() 方法终止执行。[return;]");
+            Reporter.log("【调试信息】 [dbOperate] 传入的 SQL 不是 [增、删、改、查] 功能，dbOperate() 方法终止执行。[return;]");
             return;
         }
 
@@ -84,10 +88,10 @@ public class BaseActionDBOperateUtils {
                 log.info("[调试信息] [insert] INSERT 执行成功。");
                 Reporter.log("【调试信息】 [insert] INSERT 执行成功。");
             } else {
-                log.info("[调试信息] [insert] INSERT 语句执行结果 [result <= 0]，数据 [INSERT] 失败。");
-                Reporter.log("【调试信息】 [insert] INSERT 语句执行结果 [result <= 0]，数据 [INSERT] 失败。");
+                log.info("[调试信息] [insert] INSERT 执行结果 [result <= 0]，数据 [INSERT] 失败。");
+                Reporter.log("【调试信息】 [insert] INSERT 执行结果 [result <= 0]，数据 [INSERT] 失败。");
             }
-            log.info("[调试信息] [insert] 输出 SQL 执行结果 result：[{}]", result);
+            log.info("[调试信息] [insert] INSERT 执行结果：[{}]", result);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -112,7 +116,7 @@ public class BaseActionDBOperateUtils {
                 log.info("[调试信息] [delete] DELETE 执行结果 [result <= 0]，数据 [DELETE] 失败。");
                 Reporter.log("【调试信息】 [delete] DELETE 执行结果 [result <= 0]，数据 [DELETE] 失败。");
             }
-            log.info("[调试信息] [delete] 输出 SQL 执行结果 result：[{}]", result);
+            log.info("[调试信息] [delete] DELETE 执行结果：[{}]", result);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -137,7 +141,7 @@ public class BaseActionDBOperateUtils {
                 log.info("[调试信息] [update] UPDATE 执行结果 [result <= 0]，数据 [UPDATE] 失败。");
                 Reporter.log("【调试信息】 [update] UPDATE 执行结果 [result <= 0]，数据 [UPDATE] 失败。");
             }
-            log.info("[调试信息] [update] 输出 SQL 执行结果 result：[{}]", result);
+            log.info("[调试信息] [update] UPDATE 执行结果：[{}]", result);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -157,14 +161,57 @@ public class BaseActionDBOperateUtils {
             resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
-                String id = (String) resultSet.getString("id");
+                if (null != selectResultCacheString) {
+                    selectResultCacheString = null;
+                }
+
+                selectResultCacheString = resultSet.getString(1);
+                log.info("[调试信息] [select] 输出查询结果：[{}]", selectResultCacheString);
+                Reporter.log("[调试信息] [select] 输出查询结果：[{}]" + selectResultCacheString);
+
                 log.info("[调试信息] [select] SELECT 执行成功。");
                 Reporter.log("【调试信息】 [select] SELECT 执行成功。");
-                log.info("[调试信息] [select] 输出查询结果的 id：[{}]", id);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static void selectOne(String sql) {
+        if (StringUtils.isEmpty(sql)) {
+            log.info("[调试信息] [selectOne] 传入参数 [sql == null]，selectOne() 方法终止执行。[return null;]");
+            return;
+        }
+
+        String[] strings = sql.split("@");
+        String part1 = strings[0].trim();
+        String part2 = strings[1].trim();
+//        log.info("[调试信息] [selectOne] part1：[{}]", part1);
+//        log.info("[调试信息] [selectOne] part2：[{}]", part2);
+
+        sql = "select " + part1 + " " + part2;
+        log.info("[调试信息] [selectOne] SELECT SQL：[{}]", sql);
+
+        ResultSet resultSet = null;
+        try {
+            resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+                if (null != selectResultCacheString) {
+                    selectResultCacheString = null;
+                }
+
+                selectResultCacheString = resultSet.getString(1);
+                log.info("[调试信息] [selectOne] 输出查询结果：[{} = {}]",part1, selectResultCacheString);
+                Reporter.log("[调试信息] [selectOne] 输出查询结果：[" + part1 + " = " + selectResultCacheString + "]");
+
+                log.info("[调试信息] [selectOne] SELECT 执行成功。");
+                Reporter.log("【调试信息】 [selectOne] SELECT 执行成功。");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
 }

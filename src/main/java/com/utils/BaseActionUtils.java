@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.List;
 
 import static com.common.CacheParamData.pageName;
+import static com.common.CacheParamData.selectResultCacheString;
 import static com.common.CommonData.operateElementLoopCount;
 import static com.common.CommonData.sleepTime;
 import static com.utils.AndroidDriverUtils.driver;
@@ -547,6 +548,11 @@ public class BaseActionUtils {
 
         log.info("[调试信息] [digit] 输入参数 [digit = {}]", digit);
         Reporter.log("【调试信息】 [digit] 输入参数 [digit = ]" + digit);
+
+        if (StringUtils.isEmpty(digit)) {
+            log.info("[调试信息] [digit] 传入参数 [digit == null]，digit() 方法终止执行。[return;]");
+            return;
+        }
 
         try {
             Thread.sleep(1000);

@@ -31,6 +31,11 @@ public class CacheParamData {
      */
     public static String whhwElementCache = null;
 
+    /**
+     * 缓存 select 查询结果
+     */
+    public static String selectResultCacheString = null;
+
     public interface CacheParam {
         /**
          * 共两个地方用到 CacheParam 接口定义的参数：

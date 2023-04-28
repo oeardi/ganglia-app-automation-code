@@ -56,6 +56,10 @@ modules:
       ### tab，调用系统 TAB 键。
       ### digit，调用系统 [0 - 9] 数字键。param 输入由 “数字” 组成的字符串。示例：param: "19900710"。
       ### dataInit，操作数据库进行业务数据初始化。参数："sql 语句"。示例：param: "UPDATE t SET status = '1' where status = '2';"
+      ###【4.28 新增】
+      ### dataInit，新增查询指定字段，使用 @ 分隔。示例：bvn_number@from user_bvn where user_id = (select user_id from `user` where mobile like '%1366666666');
+      ### sendSelectResult，输入的数据由 select 语句查询获得。注：这个动作不需要 param 元素，只填写 operate 即可。
+      ### digitSelectResult，输入的数据由 select 语句查询获得。（select 的查询结果保存在 “全局变量” selectResultCacheString 中。）
       - operate:
       - param:
 
