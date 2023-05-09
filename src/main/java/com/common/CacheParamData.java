@@ -9,6 +9,9 @@ import java.util.List;
  */
 public class CacheParamData {
 
+    public static String caseName;
+    public static int screenshotCount;
+
     /**
      * pageName 和 screenshotCount 用于截图时的文件名拼接。
      */

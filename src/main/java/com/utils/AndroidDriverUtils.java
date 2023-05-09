@@ -18,7 +18,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-import static com.common.CacheParamData.pageName;
+import static com.common.CacheParamData.caseName;
 import static com.common.CapabilityData.*;
 import static com.common.CommonData.*;
 
@@ -269,45 +269,30 @@ public class AndroidDriverUtils {
         return capabilities;
     }
 
-    private static int screenshotCountQuit = 0;
-
     /**
      * 退出，并在退出前截图。
      */
     public static void errorBeforeExitScreenshot(String fileFolder) {
-        log.info("[调试信息] [beforeExitScreenshot]");
-        Reporter.log("【调试信息】 [beforeExitScreenshot]");
+        log.info("[调试信息] [errorBeforeExitScreenshot]");
+        Reporter.log("【调试信息】 [errorBeforeExitScreenshot]");
 
-        try {
-            Thread.sleep(sleepTime);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        if (StringUtils.isEmpty(pageName)) {
-            pageName = "UndefinedPage";
-        }
-        String fileName = "error-before-exit-screenshot_" + screenshotCountQuit + "_" + pageName + ".png";
-
+        String fileName = caseName + "_" + "Before-Exit" + ".png";
         File destFile = new File(fileFolder, fileName);
         try {
             if (null != driver) {
                 FileUtils.copyFile(driver.getScreenshotAs(OutputType.FILE).getCanonicalFile(), destFile);
-
-                log.info("[调试信息] [beforeExitScreenshot] 截图保存路径：{}{}", fileFolder, fileName);
-                Reporter.log("【调试信息】 [beforeExitScreenshot] 截图保存路径：" + fileFolder + fileName);
-
+                log.info("[调试信息] [errorBeforeExitScreenshot] 截图保存路径：{}{}", fileFolder, fileName);
+                Reporter.log("【调试信息】 [errorBeforeExitScreenshot] 截图保存路径：" + fileFolder + fileName);
+                Thread.sleep(sleepTime);
             } else {
-                log.info("[调试信息] [beforeExitScreenshot] driver == null.");
+                log.info("[调试信息] [errorBeforeExitScreenshot] driver == null.");
             }
         } catch (Exception e) {
-            log.info("[调试信息] [beforeExitScreenshot] 打印操作元素失败异常信息：{}", e.toString());
+            log.info("[调试信息] [errorBeforeExitScreenshot] 打印操作元素失败异常信息：{}", e.toString());
 //            throw new WebDriverException();
         }
 
-        screenshotCountQuit++;
-
-        log.info("[调试信息] [beforeExitScreenshot] “必要元素” 不存在，程序停止运行。（手动抛出 RuntimeException 异常）");
+        log.info("[调试信息] [errorBeforeExitScreenshot] “必要元素” 不存在，程序停止运行。（手动抛出 RuntimeException 异常）");
         throw new RuntimeException();
     }
 

@@ -16,11 +16,10 @@ import org.openqa.selenium.OutputType;
 import org.testng.Reporter;
 
 import java.io.File;
-import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
 
-import static com.common.CacheParamData.pageName;
+import static com.common.CacheParamData.*;
 import static com.common.CommonData.operateElementLoopCount;
 import static com.common.CommonData.sleepTime;
 import static com.utils.AndroidDriverUtils.driver;
@@ -356,8 +355,6 @@ public class BaseActionUtils {
         log.info("[调试信息] [moveUntil] 执行完毕。");
     }
 
-    private static int screenshotCount = 0;
-
     /**
      * 截屏（如果不指定路径，则图片存储在工程路径下）
      */
@@ -365,28 +362,25 @@ public class BaseActionUtils {
         log.info("[调试信息] [screenshot]");
         Reporter.log("【调试信息】 [screenshot]");
 
-        try {
-            Thread.sleep(sleepTime);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
         if (StringUtils.isEmpty(pageName)) {
             pageName = "UndefinedPage";
         }
-        String fileName = "test-screenshot_" + screenshotCount + "_" + pageName + ".png";
+        String fileName = caseName + "_" + screenshotCount++ + "_" + pageName + ".png";
 
         File destFile = new File(fileFolder, fileName);
         try {
-            FileUtils.copyFile(driver.getScreenshotAs(OutputType.FILE).getCanonicalFile(), destFile);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            if (null != driver) {
+                FileUtils.copyFile(driver.getScreenshotAs(OutputType.FILE).getCanonicalFile(), destFile);
+                log.info("[调试信息] [screenshot] 截图保存路径：{}{}", fileFolder, fileName);
+                Reporter.log("【调试信息】 [screenshot] 截图保存路径：" + fileFolder + fileName);
+                Thread.sleep(sleepTime);
+            } else {
+                log.info("[调试信息] [screenshot] driver == null.");
+            }
+        } catch (Exception e) {
+            log.info("[调试信息] [screenshot] 打印操作元素失败异常信息：{}", e.toString());
+//            throw new RuntimeException(e);
         }
-
-        screenshotCount++;
-
-        log.info("[调试信息] [screenshot] 截图保存路径：{}{}", fileFolder, fileName);
-        Reporter.log("【调试信息】 [screenshot] 截图保存路径：" + fileFolder + fileName);
 
         log.info("[调试信息] [screenshot] 执行完毕。");
     }

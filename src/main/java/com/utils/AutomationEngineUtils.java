@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static com.common.CacheParamData.pageName;
+import static com.common.CacheParamData.*;
 import static com.common.CommonData.ContainKeywork.*;
 import static com.common.CommonData.endOfRunWaitingTime;
 import static com.common.WhiteListData.*;
@@ -60,9 +60,12 @@ public class AutomationEngineUtils {
         Reporter.log("【调试信息】 [uiAtuo] [测试开始] [↓] [↓] [↓]");
 
         // 输出 case_name 信息
-        String caseName = (String) yamlToMap.get(CASE_NAME);
+        caseName = null;
+        caseName = (String) yamlToMap.get(CASE_NAME);
         log.info("[调试信息] [uiAtuo] 测试用例名称：[{}]", caseName);
         Reporter.log("【调试信息】 [uiAtuo] 测试用例名称 [page = " + caseName + "]");
+
+        screenshotCount = 0;
 
         // 输出 description 信息
         String description = (String) yamlToMap.get(DESCRIPTION);
@@ -85,6 +88,7 @@ public class AutomationEngineUtils {
         getCommonConfigEntity();
 
         MobileElement mobileElement = null;
+        pageName = null;
 
         Iterator iterator = modulesList.iterator();
         while (iterator.hasNext()) {

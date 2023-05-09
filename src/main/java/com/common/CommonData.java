@@ -47,7 +47,7 @@ public class CommonData {
      * 用于 uiAtuo() 方法，判断 yaml 中是否包含以下字符串，进而进行相应处理。
      */
     public interface ContainKeywork {
-        String CASE_NAME = "case_name";
+        String CASE_NAME = "name";
         String DESCRIPTION = "description";
         String MODULES = "modules";
         String PAGE = "page";
