@@ -11,7 +11,6 @@ import io.appium.java_client.touch.offset.PointOption;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
 import org.testng.Reporter;
@@ -19,11 +18,9 @@ import org.testng.Reporter;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Date;
 import java.util.List;
 
 import static com.common.CacheParamData.pageName;
-import static com.common.CacheParamData.selectResultCacheString;
 import static com.common.CommonData.operateElementLoopCount;
 import static com.common.CommonData.sleepTime;
 import static com.utils.AndroidDriverUtils.driver;
@@ -364,7 +361,7 @@ public class BaseActionUtils {
     /**
      * 截屏（如果不指定路径，则图片存储在工程路径下）
      */
-    public static void screenshot() {
+    public static void screenshot(String fileFolder) {
         log.info("[调试信息] [screenshot]");
         Reporter.log("【调试信息】 [screenshot]");
 
@@ -374,19 +371,14 @@ public class BaseActionUtils {
             throw new RuntimeException(e);
         }
 
-        // 屏幕截图保存在 test-screenshot/ 目录下
-        String fileFolder = "test-screenshot/";
-        String fileName = DateFormatUtils.format(new Date(), "yyyyMMddHHmmss") + "_" + screenshotCount + "_" + pageName + ".png";
-
-        File reportDir = new File(fileFolder);
-        if (!reportDir.exists() && !reportDir.isDirectory()) {
-            reportDir.mkdir();
+        if (StringUtils.isEmpty(pageName)) {
+            pageName = "UndefinedPage";
         }
+        String fileName = "test-screenshot_" + screenshotCount + "_" + pageName + ".png";
 
-        File file = new File(fileFolder, fileName);
-
+        File destFile = new File(fileFolder, fileName);
         try {
-            FileUtils.copyFile(driver.getScreenshotAs(OutputType.FILE).getCanonicalFile(), file);
+            FileUtils.copyFile(driver.getScreenshotAs(OutputType.FILE).getCanonicalFile(), destFile);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

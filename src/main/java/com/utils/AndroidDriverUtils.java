@@ -9,7 +9,6 @@ import io.appium.java_client.android.AndroidDriver;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Reporter;
@@ -17,7 +16,6 @@ import org.testng.Reporter;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import static com.common.CacheParamData.pageName;
@@ -31,6 +29,15 @@ import static com.common.CommonData.*;
  */
 @Slf4j
 public class AndroidDriverUtils {
+
+    private AndroidDriverUtils() {
+    }
+
+    private static AndroidDriverUtils androidDriverUtils = new AndroidDriverUtils();
+
+    public static AndroidDriverUtils getAndroidDriverUtils() {
+        return androidDriverUtils;
+    }
 
     public static AndroidDriver<MobileElement> driver = null;
 
@@ -71,6 +78,15 @@ public class AndroidDriverUtils {
 //        log.info("[调试信息] [getInitDriver] 打印 [driver.getPageSource() = {}]", pageSource);
 //        log.info("[调试信息] [getInitDriver] 打印 [driver.getCurrentPackage() = {}]", currentPackage);
 //        log.info("[调试信息] [getInitDriver] 打印 [driver.currentActivity() = {}]", currentActivity);
+
+        /**
+         * 创建测试报告目录
+         */
+        String folder = testReportFolder;
+        File reportDir = new File(folder);
+        if (!reportDir.exists() && !reportDir.isDirectory()) {
+            reportDir.mkdir();
+        }
 
         log.info("[调试信息] [initDriver] 执行完毕。");
     }
@@ -256,11 +272,11 @@ public class AndroidDriverUtils {
     private static int screenshotCountQuit = 0;
 
     /**
-     * 退出，并释放 sessionId。
+     * 退出，并在退出前截图。
      */
-    public static void quitAndScreenshot() {
-        log.info("[调试信息] [quitAndScreenshot]");
-        Reporter.log("【调试信息】 [quitAndScreenshot]");
+    public static void errorBeforeExitScreenshot(String fileFolder) {
+        log.info("[调试信息] [beforeExitScreenshot]");
+        Reporter.log("【调试信息】 [beforeExitScreenshot]");
 
         try {
             Thread.sleep(sleepTime);
@@ -268,36 +284,30 @@ public class AndroidDriverUtils {
             throw new RuntimeException(e);
         }
 
-        String fileFolder = "test-before-quit-screenshot/";
-
         if (StringUtils.isEmpty(pageName)) {
-            pageName = "InitPage";
+            pageName = "UndefinedPage";
         }
-        String fileName = DateFormatUtils.format(new Date(), "yyyyMMddHHmmss") + "_" + screenshotCountQuit + "_" + pageName + ".png";
-
-        File reportDir = new File(fileFolder);
-        if (!reportDir.exists() && !reportDir.isDirectory()) {
-            reportDir.mkdir();
-        }
+        String fileName = "error-before-exit-screenshot_" + screenshotCountQuit + "_" + pageName + ".png";
 
         File destFile = new File(fileFolder, fileName);
         try {
             if (null != driver) {
                 FileUtils.copyFile(driver.getScreenshotAs(OutputType.FILE).getCanonicalFile(), destFile);
 
-                log.info("[调试信息] [quitAndScreenshot] 截图保存路径：{}{}", fileFolder, fileName);
-                Reporter.log("【调试信息】 [quitAndScreenshot] 截图保存路径：" + fileFolder + fileName);
+                log.info("[调试信息] [beforeExitScreenshot] 截图保存路径：{}{}", fileFolder, fileName);
+                Reporter.log("【调试信息】 [beforeExitScreenshot] 截图保存路径：" + fileFolder + fileName);
 
-                screenshotCountQuit++;
             } else {
-                log.info("[调试信息] [quitAndScreenshot] driver == null.");
+                log.info("[调试信息] [beforeExitScreenshot] driver == null.");
             }
         } catch (Exception e) {
-            log.info("[调试信息] [quitAndScreenshot] 打印操作元素失败异常信息：{}", e.toString());
+            log.info("[调试信息] [beforeExitScreenshot] 打印操作元素失败异常信息：{}", e.toString());
 //            throw new WebDriverException();
         }
 
-        log.info("[调试信息] [quitAndScreenshot] “必要元素” 不存在，程序停止运行。（手动抛出 RuntimeException 异常）");
+        screenshotCountQuit++;
+
+        log.info("[调试信息] [beforeExitScreenshot] “必要元素” 不存在，程序停止运行。（手动抛出 RuntimeException 异常）");
         throw new RuntimeException();
     }
 

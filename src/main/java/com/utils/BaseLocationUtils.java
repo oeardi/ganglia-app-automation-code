@@ -13,7 +13,7 @@ import java.util.List;
 
 import static com.common.CommonData.*;
 import static com.utils.AndroidDriverUtils.driver;
-import static com.utils.AndroidDriverUtils.quitAndScreenshot;
+import static com.utils.AndroidDriverUtils.errorBeforeExitScreenshot;
 
 /**
  * Location 部分的操作
@@ -300,7 +300,7 @@ public class BaseLocationUtils {
 
         if (null == mobileElement && isRequisiteFlag == 0 && requisite.toUpperCase().equals(_Y)) {
             log.info("[调试信息] [requisiteElementIsExist] 赋值 [mobileElement = null], [isRequisiteFlag = 0], [requisite = Y]。");
-            quitAndScreenshot();
+            errorBeforeExitScreenshot(testReportFolder);
         }
 
     }

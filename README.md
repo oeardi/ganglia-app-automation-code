@@ -45,8 +45,8 @@
 - 获取元素数量
 - 指定坐标滑屏
 - 指定方向滑屏
-- 屏幕截图（test-screenshot 目录）
-- 异常退出截图（test-before-quit-screenshot 目录）
+- 屏幕截图（保存在 test-report-output/report-yyyyMMddHHmmss/ 目录）
+- 异常退出截图（保存在 test-report-output/report-yyyyMMddHHmmss/ 目录）
 - 设置等待时间
 - 清空控件文本
 - 获取 Toast 信息
@@ -54,7 +54,7 @@
 - 调用系统按键
 - 初始化业务数据
 - 断言功能
-- 生成测试报告（test-report-output 目录）
+- 生成测试报告（保存在 test-report-output/report-yyyyMMddHHmmss/ 目录）
 - 同质化操作处理
 - 白名单统一处理元素
 

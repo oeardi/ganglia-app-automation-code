@@ -1,5 +1,9 @@
 package com.common;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
+
+import java.util.Date;
+
 /**
  * 公共参数
  *
@@ -36,6 +40,8 @@ public class CommonData {
      * requisite，标识为 “是否必须元素”。如果是必须元素（requisite =Y），定位不到元素时，程序会调用 quit() 方法停止运行。
      */
     public static final String _Y = "Y";
+
+    public static String testReportFolder = "test-report-output/report-" + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss") + "/";
 
     /**
      * 用于 uiAtuo() 方法，判断 yaml 中是否包含以下字符串，进而进行相应处理。

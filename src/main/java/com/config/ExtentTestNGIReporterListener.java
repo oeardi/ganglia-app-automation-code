@@ -8,12 +8,14 @@ import com.aventstack.extentreports.model.TestAttribute;
 import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 import com.aventstack.extentreports.reporter.configuration.ChartLocation;
 import com.aventstack.extentreports.reporter.configuration.Theme;
-import org.apache.commons.lang3.time.DateFormatUtils;
+import com.common.CommonData;
 import org.testng.*;
 import org.testng.xml.XmlSuite;
 
 import java.io.File;
 import java.util.*;
+
+import static com.common.CommonData.testReportFolder;
 
 /**
  * @author 冷枫红舞
@@ -24,11 +26,20 @@ public class ExtentTestNGIReporterListener implements IReporter {
 
     @Override
     public void generateReport(List<XmlSuite> xmlSuites, List<ISuite> suites, String outputDirectory) {
-        init();
+//        init();
         boolean createSuiteNode = false;
         if (suites.size() > 1) {
             createSuiteNode = true;
         }
+
+        /**
+         * 取 xml 中的 sutie name 字段值
+         */
+        ISuite iSuite = suites.get(suites.size() - 1);
+        String suiteName = iSuite.getName();
+
+        init(testReportFolder, suiteName);
+
         for (ISuite suite : suites) {
             Map<String, ISuiteResult> result = suite.getResults();
             // 如果 suite 里面没有任何用例，直接跳过，不在报告里生成
@@ -99,17 +110,15 @@ public class ExtentTestNGIReporterListener implements IReporter {
         extent.flush();
     }
 
-    private void init() {
+    private void init(String folder, String suiteName) {
 
-        // 生成的路径以及文件名
-        String folder = "test-report-output/";
-        String fileName = "TestReport-" + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss") + ".html";
-
-        // 文件夹不存在的话进行创建
         File reportDir = new File(folder);
         if (!reportDir.exists() && !reportDir.isDirectory()) {
             reportDir.mkdir();
         }
+
+        String fileName = "TestReport-" + suiteName + ".html";
+
         ExtentHtmlReporter htmlReporter = new ExtentHtmlReporter(folder + fileName);
         // 设置静态文件的 DNS【解决 cdn.rawgit.com 访问不了的情况】
         htmlReporter.config().setResourceCDN(ResourceCDN.EXTENTREPORTS);
@@ -122,6 +131,7 @@ public class ExtentTestNGIReporterListener implements IReporter {
         htmlReporter.config().setDocumentTitle("QA TEST REPORT");
         htmlReporter.config().setReportName("QA TEST REPORT");
         htmlReporter.config().setCSS(".node.level-1  ul{ display:none;} .node.level-1.active ul{display:block;}");
+
         extent = new ExtentReports();
         extent.attachReporter(htmlReporter);
 //        extent.attachReporter(htmlReporter, createExtentXReporter());
@@ -199,11 +209,4 @@ public class ExtentTestNGIReporterListener implements IReporter {
         return calendar.getTime();
     }
 
-//    public static ExtentXReporter createExtentXReporter() {
-//        ExtentXReporter extentXReporter = new ExtentXReporter("172.28.38.81", 17017);
-//        extentXReporter.report().setProjectName("test1");
-//        extentXReporter.report().setReportName("Build-1224");
-//        extentXReporter.report().setServerUrl("http://localhost:1337/");
-//        return extentXReporter;
-//    }
 }

@@ -20,6 +20,7 @@ import static com.common.BaseLocationData.LocationWay.*;
 import static com.common.CacheParamData.CacheParam.PARAM_STRING;
 import static com.common.CacheParamData.selectResultCacheString;
 import static com.common.CommonData.isRequisiteFlag;
+import static com.common.CommonData.testReportFolder;
 import static com.utils.BaseActionDBOperateUtils.dbOperate;
 import static com.utils.BaseActionUtils.*;
 import static com.utils.BaseLocationUtils.*;
@@ -36,6 +37,14 @@ import static com.utils.BaseLocationUtils.*;
 @Slf4j
 public class CoreAnalysisEngineUtils {
 
+    private CoreAnalysisEngineUtils() {
+    }
+
+    private static CoreAnalysisEngineUtils coreAnalysisEngineUtils = new CoreAnalysisEngineUtils();
+
+    public static CoreAnalysisEngineUtils getCoreAnalysisEngineUtils() {
+        return coreAnalysisEngineUtils;
+    }
 
     /**
      * 解析并执行 yaml 中的 location 定位信息.
@@ -415,7 +424,7 @@ public class CoreAnalysisEngineUtils {
                 case SCREENSHOT:
                     log.info("[调试信息] [doAction] [switch] [SCREENSHOT] 开始执行：[↓]");
                     Reporter.log("【调试信息】 [doAction] [switch] [SCREENSHOT] 开始执行：[↓]");
-                    screenshot();
+                    screenshot(testReportFolder);
                     log.info("[调试信息] [doAction] [switch] [SCREENSHOT] 执行完毕。[↑]");
                     Reporter.log("【调试信息】 [doAction] [switch] [SCREENSHOT] 执行完毕。[↑]");
                     break;
