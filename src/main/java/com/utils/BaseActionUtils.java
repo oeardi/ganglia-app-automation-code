@@ -21,7 +21,6 @@ import java.util.List;
 
 import static com.common.CacheParamData.*;
 import static com.common.CommonData.operateElementLoopCount;
-import static com.common.CommonData.sleepTime;
 import static com.utils.AndroidDriverUtils.driver;
 import static com.utils.BaseLocationUtils.*;
 
@@ -36,31 +35,28 @@ public class BaseActionUtils {
     /**
      * 点击
      *
-     * @param mobileElement
+     * @param element
      */
-    public static void click(MobileElement mobileElement) {
+    public static void click(MobileElement element) {
         log.info("[调试信息] [click]");
         Reporter.log("【调试信息】 [click]");
+
         /**
          * 框架设计思想，是将 “元素的定位”，和定位后的 “元素的操作” 分为两个步骤处理。
          * 当没有定位到元素时，MobileElement 的返回值就会为 null 值，
          * 那么在 click() 的时候就会报错。所以需要 if (mobileElement != null) 判断。
          */
-        if (null == mobileElement) {
-            log.info("[调试信息] [click] 输入参数 [mobileElement == null]，click() 方法终止执行。[return;]");
+        if (null == element) {
+            log.info("[调试信息] [click] 输入参数 [element == null]，click() 方法终止执行。[return;]");
             return;
         }
 
         for (int i = 0; i <= operateElementLoopCount; i++) {
-            /**
-             * org.openqa.selenium.WebDriverException
-             */
             try {
-                mobileElement.click();
+                element.click();
                 return;
-
             } catch (Exception e) {
-//                log.info("[调试信息] [click] 打印操作元素失败异常信息：{}", e.toString());
+                log.info("[调试信息] [click] 打印操作元素失败异常信息：{}", e.toString());
                 int tempNum = operateElementLoopCount - i;
                 if (tempNum > 0) {
                     log.info("[调试信息] [click] 操作元素失败，即将重试 [{}] 次。", tempNum);
@@ -373,13 +369,14 @@ public class BaseActionUtils {
                 FileUtils.copyFile(driver.getScreenshotAs(OutputType.FILE).getCanonicalFile(), destFile);
                 log.info("[调试信息] [screenshot] 截图保存路径：{}{}", fileFolder, fileName);
                 Reporter.log("【调试信息】 [screenshot] 截图保存路径：" + fileFolder + fileName);
-                Thread.sleep(sleepTime);
+                Thread.sleep(1000);
             } else {
                 log.info("[调试信息] [screenshot] driver == null.");
             }
         } catch (Exception e) {
-            log.info("[调试信息] [screenshot] 打印操作元素失败异常信息：{}", e.toString());
-//            throw new RuntimeException(e);
+            log.info("[调试信息] [screenshot] 打印操作元素失败异常信息：");
+            log.info("[调试信息] [screenshot] {}", e.toString());
+            log.info("[调试信息] [screenshot] 【发生异常，截图失败】。");
         }
 
         log.info("[调试信息] [screenshot] 执行完毕。");

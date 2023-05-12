@@ -236,15 +236,7 @@ public class CoreAnalysisEngineUtils {
         Reporter.log("【调试信息】 [doAction] 开始执行：");
 
         /**
-         * 如果 actionMobileElement 为 null，则会影响到对 “元素” 的操作，例如：click(actionMobileElement); 就会执行失败。
-         */
-//        if (null == actionMobileElement) {
-//            log.info("[调试信息] [doAction] 传入参数 [actionMobileElement == null]，doAction() 方法终止执行。[程序退出]");
-//            quitAndScreenshot();
-//        }
-
-        /**
-         * 不需要判断 actionMobileElement 入参是否为 null，因为在 yaml 文件 location 中的元素是可以都不填写的，
+         * 不需要判断 actionMobileElement 入参是否为 null，因为在 yaml 文件 location 中的元素是可以不填写的，
          * 所以这种情况下 actionMobileElement 一定为 null。
          * 程序会在具体使用到 actionMobileElement 变量时，判断该变量是否为 null。
          */
@@ -308,9 +300,14 @@ public class CoreAnalysisEngineUtils {
                 case CLICK:
                     log.info("[调试信息] [doAction] [switch] [CLICK] 开始执行：[↓]");
                     Reporter.log("【调试信息】 [doAction] [switch] [CLICK] 开始执行：[↓]");
-                    click(actionMobileElement);
-                    log.info("[调试信息] [doAction] [switch] [CLICK] 执行完毕。[↑]");
-                    Reporter.log("【调试信息】 [doAction] [switch] [CLICK] 执行完毕。[↑]");
+                    if (null != actionMobileElement) {
+                        click(actionMobileElement);
+                        log.info("[调试信息] [doAction] [switch] [CLICK] 执行完毕。[↑]");
+                        Reporter.log("【调试信息】 [doAction] [switch] [CLICK] 执行完毕。[↑]");
+                    } else {
+                        log.info("[调试信息] [doAction] [switch] [CLICK] element == null，不执行 click 操作。");
+                        Reporter.log("【调试信息】 [doAction] [switch] [CLICK] element == null，不执行 click 操作。");
+                    }
                     break;
 
                 case "SENDKEY":

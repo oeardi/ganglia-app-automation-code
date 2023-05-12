@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Reporter;
 
@@ -280,7 +281,8 @@ public class AndroidDriverUtils {
         File destFile = new File(fileFolder, fileName);
         try {
             if (null != driver) {
-                FileUtils.copyFile(driver.getScreenshotAs(OutputType.FILE).getCanonicalFile(), destFile);
+                File sourceFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+                FileUtils.copyFile(sourceFile, destFile);
                 log.info("[调试信息] [errorBeforeExitScreenshot] 截图保存路径：{}{}", fileFolder, fileName);
                 Reporter.log("【调试信息】 [errorBeforeExitScreenshot] 截图保存路径：" + fileFolder + fileName);
                 Thread.sleep(sleepTime);
@@ -293,7 +295,7 @@ public class AndroidDriverUtils {
         }
 
         log.info("[调试信息] [errorBeforeExitScreenshot] “必要元素” 不存在，程序停止运行。（手动抛出 RuntimeException 异常）");
-        throw new RuntimeException();
+//        throw new RuntimeException();
     }
 
     /**

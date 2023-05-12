@@ -118,13 +118,13 @@ public class BaseLocationUtils {
 
         MobileElement mobileElement = findElementWithBy(by);
         if (null == mobileElement) {
-            log.info("[调试信息] [findElementByBase] 元素不存在 [element = {}]，findElement() 方法结束运行，[return null;]。", element);
-            Reporter.log("【调试信息】 [findElementByBase] 元素不存在 [element = " + element + "]，findElement() 方法结束运行，[return null;]。");
+            log.info("[调试信息] [findElementByBase] [element = {}] 元素不存在，findElement() 方法结束运行，[return null;]。", element);
+            Reporter.log("【调试信息】 [findElementByBase] [element = " + element + "] 元素不存在，findElement() 方法结束运行，[return null;]。");
             return null;
         }
 
-        log.info("[调试信息] [findElementByBase] 元素存在 [element = {}]。", element);
-        Reporter.log("【调试信息】 [findElementByBase] 元素存在 [ element = " + element + "]。");
+        log.info("[调试信息] [findElementByBase] [element = {}] 元素存在。", element);
+        Reporter.log("【调试信息】 [findElementByBase] [ element = " + element + "] 元素存在。");
         return mobileElement;
     }
 
