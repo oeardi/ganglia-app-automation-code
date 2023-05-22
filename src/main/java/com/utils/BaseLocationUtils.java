@@ -3,17 +3,21 @@ package com.utils;
 import com.common.CommonData;
 import io.appium.java_client.MobileElement;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.testng.Assert;
 import org.testng.Reporter;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.common.CacheParamData.caseName;
 import static com.common.CommonData.*;
 import static com.utils.AndroidDriverUtils.driver;
-import static com.utils.AndroidDriverUtils.errorBeforeExitScreenshot;
 
 /**
  * Location 部分的操作
@@ -50,28 +54,24 @@ public class BaseLocationUtils {
                      * 找到元素，“是否找到元素” 标志位置 1。[return mobileElement;]
                      */
                     CommonData.isRequisiteFlag = 1;
-                    log.info("[调试信息] [findElementWithBy] 已定位到元素，[isRequisiteFlag] 标志位（是否找到元素）被赋值为：[{}]", isRequisiteFlag);
-                    Reporter.log("【调试信息】 [findElementWithBy] 已定位到元素，[isRequisiteFlag] 标志位（是否找到元素）被赋值为：[" + isRequisiteFlag + "]");
+                    log.info("[调试信息] [findElementWithBy] 已定位到元素，[isRequisiteFlag = {}]", isRequisiteFlag);
+                    Reporter.log("【调试信息】 [findElementWithBy] 已定位到元素，[isRequisiteFlag = " + isRequisiteFlag + "]");
 
                     return mobileElement;
                 }
             } catch (Exception e) {
-//                log.info("[调试信息] [findElementWithBy] 打印定位元素异常信息：{}", e.toString());
+//                log.info("[调试信息] [findElementWithBy] findElementLoopCount = {}，i = {}", findElementLoopCount, i);
                 int tempNum = findElementLoopCount - i;
                 if (tempNum > 0) {
-                    log.info("[调试信息] [findElementWithBy] 未定位到元素，即将重试 [{}] 次。[isRequisiteFlag] 标志位（是否找到元素）的值为：[{}]（应为 0）。", tempNum, isRequisiteFlag);
-                    Reporter.log("【调试信息】 [findElementWithBy] 未定位到元素，即将重试 [" + tempNum + "] 次。[isRequisiteFlag] 标志位（是否找到元素）的值为 [" + isRequisiteFlag + "]（应为 0）。");
+                    log.info("[调试信息] [findElementWithBy] 未定位到元素，即将重试 [{}] 次，当前 [isRequisiteFlag = {}]（应为 0）。", tempNum, isRequisiteFlag);
+                    Reporter.log("【调试信息】 [findElementWithBy] 未定位到元素，即将重试 [" + tempNum + "] 次， 当前 [isRequisiteFlag = " + isRequisiteFlag + "]（应为 0）。");
                 }
             }
         }
 
-        /**
-         * 未找到元素，“是否找到元素” 标志位应为 0，程序继续执行 “是否必须元素” 处理逻辑。
-         */
-        Assert.assertEquals(isRequisiteFlag, 0);
-
-        log.info("[调试信息] [findElementWithBy] 没有定位到元素，findElementWithBy() 方法即将返回 [mobileElement = {}]。", mobileElement);
-        Reporter.log("【调试信息】 [findElementWithBy] 没有定位到元素，findElementWithBy() 方法即将返回 [mobileElement = " + mobileElement + "]。");
+        Assert.assertEquals(isRequisiteFlag, 0); // 未找到元素，“是否找到元素” 标志位应为 0，程序继续执行 “是否必须元素” 处理逻辑。
+        log.info("[调试信息] [findElementWithBy] 没有定位到元素，方法返回：[mobileElement = {}]。", mobileElement);
+        Reporter.log("【调试信息】 [findElementWithBy] 没有定位到元素，方法返回：[mobileElement = " + mobileElement + "]。");
         log.info("[调试信息] [findElementWithBy] 执行完毕。");
         Reporter.log("【调试信息】 [findElementWithBy] 执行完毕。");
 
@@ -284,23 +284,38 @@ public class BaseLocationUtils {
     }
 
     /**
-     * 根据 yaml 文件中的 [requisite] 元素，判断当前控件是否为必须，
-     * 如果 requisite= Y，但元素没有被找到，就截屏并退出。
+     * 如果 “必要元素” 没有找到，即：requisite = Y 且 isRequisiteFlag = 0，
+     * 则终止程序执行。并在当前页面截图。
      *
      * @param mobileElement
-     * @param isRequisiteFlag
+     * @param isRequisiteFlag 元素是否 “找到” 标志位
      * @param requisite       是否是 “必要元素” 标志位
      */
     public static void requisiteElementIsExist(MobileElement mobileElement, int isRequisiteFlag, String requisite) {
 
-        if (StringUtils.isEmpty(requisite)) {
-            requisite = "N";
-            log.info("[调试信息] [requisiteElementIsExist] 赋值 [requisite = N]。");
-        }
-
         if (null == mobileElement && isRequisiteFlag == 0 && requisite.toUpperCase().equals(_Y)) {
             log.info("[调试信息] [requisiteElementIsExist] 赋值 [mobileElement = null], [isRequisiteFlag = 0], [requisite = Y]。");
-            errorBeforeExitScreenshot(testReportFolder);
+
+            String fileName = caseName + "_" + "Before-Exit" + ".png";
+            File destFile = new File(testReportFolder, fileName);
+            try {
+                if (null != driver) {
+                    File sourceFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+                    FileUtils.copyFile(sourceFile, destFile);
+                    log.info("[调试信息] [requisiteElementIsExist] 截图保存路径：{}{}", testReportFolder, fileName);
+                    Reporter.log("【调试信息】 [requisiteElementIsExist] 截图保存路径：" + testReportFolder + fileName);
+                    Thread.sleep(sleepTime);
+                } else {
+                    log.info("[调试信息] [requisiteElementIsExist] driver == null.");
+                }
+            } catch (Exception e) {
+                log.info("[调试信息] [requisiteElementIsExist] 打印操作元素失败异常信息：{}", e.toString());
+//            throw new WebDriverException();
+            }
+
+            log.info("[调试信息] [requisiteElementIsExist] “必要元素” 不存在，程序停止运行。（手动抛出 RuntimeException 异常）");
+            throw new RuntimeException();
+
         }
 
     }

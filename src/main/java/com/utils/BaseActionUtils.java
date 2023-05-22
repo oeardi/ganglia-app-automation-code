@@ -233,7 +233,7 @@ public class BaseActionUtils {
         Reporter.log("【调试信息】 [moveWithCoordinate] 从 [fromX = " + fromX + ", fromY = " + fromY + "] 移动到 [toX = " + toX + ", toY = " + toY + "]");
 
         try {
-            Thread.sleep(3000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -318,7 +318,7 @@ public class BaseActionUtils {
         Reporter.log("【调试信息】 [moveFixedUpDownLeftRight] 从 [fromX = " + fromX + ", fromY = " + fromY + "] 移动到 [toX = " + toX + ", toY = " + toY + "]");
 
         try {
-            Thread.sleep(3000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -361,15 +361,15 @@ public class BaseActionUtils {
         if (StringUtils.isEmpty(pageName)) {
             pageName = "UndefinedPage";
         }
-        String fileName = caseName + "_" + screenshotCount++ + "_" + pageName + ".png";
+        String fileName = caseName + "_pic" + screenshotCount++ + "_" + pageName + ".png";
 
         File destFile = new File(fileFolder, fileName);
         try {
+            Thread.sleep(1000);
             if (null != driver) {
                 FileUtils.copyFile(driver.getScreenshotAs(OutputType.FILE).getCanonicalFile(), destFile);
                 log.info("[调试信息] [screenshot] 截图保存路径：{}{}", fileFolder, fileName);
                 Reporter.log("【调试信息】 [screenshot] 截图保存路径：" + fileFolder + fileName);
-                Thread.sleep(1000);
             } else {
                 log.info("[调试信息] [screenshot] driver == null.");
             }
@@ -394,7 +394,7 @@ public class BaseActionUtils {
         long millisecond = 0;
 
         if (StringUtils.isEmpty(param)) {
-            millisecond = 1000;
+            millisecond = 500;
             log.info("[调试信息] [waiting] 传入参数 [param == null]，默认赋值 millisecond = 1000（毫秒）。");
         } else {
             log.info("[调试信息] [waiting] 程序 waiting {}（毫秒）...", param);
@@ -492,12 +492,6 @@ public class BaseActionUtils {
         log.info("[调试信息] [back]");
         Reporter.log("【调试信息】 [back]");
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
         log.info("[调试信息] [back] 点击 Android 键盘 [返回] 键");
         Reporter.log("【调试信息】 [back] 点击 Android 键盘 [返回] 键");
         driver.pressKey(new KeyEvent().withKey(AndroidKey.BACK));
@@ -511,12 +505,6 @@ public class BaseActionUtils {
     public static void tab() {
         log.info("[调试信息] [tab]");
         Reporter.log("【调试信息】 [tab]");
-
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
 
         log.info("[调试信息] [tab] 点击 Android 键盘 [TAB] 键");
         Reporter.log("【调试信息】 [tab] 点击 Android 键盘 [TAB] 键");
@@ -537,12 +525,6 @@ public class BaseActionUtils {
             return;
         }
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
         char[] chars = digit.toCharArray();
         for (int i = 0; i < chars.length; i++) {
 //            log.info("[调试信息] [chars]：{}", chars[i]);
@@ -553,54 +535,54 @@ public class BaseActionUtils {
             }
             switch (chars[i]) {
                 case '1':
+                    driver.pressKey(new KeyEvent().withKey(AndroidKey.DIGIT_1));
                     log.info("[调试信息] [digit] 点击 Android 键盘 [1] 键");
 //                    Reporter.log("【调试信息】 [digit] 点击 Android 键盘 [1] 键");
-                    driver.pressKey(new KeyEvent().withKey(AndroidKey.DIGIT_1));
                     break;
                 case '2':
+                    driver.pressKey(new KeyEvent().withKey(AndroidKey.DIGIT_2));
                     log.info("[调试信息] [digit] 点击 Android 键盘 [2] 键");
 //                    Reporter.log("【调试信息】 [digit] 点击 Android 键盘 [2] 键");
-                    driver.pressKey(new KeyEvent().withKey(AndroidKey.DIGIT_2));
                     break;
                 case '3':
+                    driver.pressKey(new KeyEvent().withKey(AndroidKey.DIGIT_3));
                     log.info("[调试信息] [digit] 点击 Android 键盘 [3] 键");
 //                    Reporter.log("【调试信息】 [digit] 点击 Android 键盘 [3] 键");
-                    driver.pressKey(new KeyEvent().withKey(AndroidKey.DIGIT_3));
                     break;
                 case '4':
+                    driver.pressKey(new KeyEvent().withKey(AndroidKey.DIGIT_4));
                     log.info("[调试信息] [digit] 点击 Android 键盘 [4] 键");
 //                    Reporter.log("【调试信息】 [digit] 点击 Android 键盘 [4] 键");
-                    driver.pressKey(new KeyEvent().withKey(AndroidKey.DIGIT_4));
                     break;
                 case '5':
+                    driver.pressKey(new KeyEvent().withKey(AndroidKey.DIGIT_5));
                     log.info("[调试信息] [digit] 点击 Android 键盘 [5] 键");
 //                    Reporter.log("【调试信息】 [digit] 点击 Android 键盘 [5] 键");
-                    driver.pressKey(new KeyEvent().withKey(AndroidKey.DIGIT_5));
                     break;
                 case '6':
+                    driver.pressKey(new KeyEvent().withKey(AndroidKey.DIGIT_6));
                     log.info("[调试信息] [digit] 点击 Android 键盘 [6] 键");
 //                    Reporter.log("【调试信息】 [digit] 点击 Android 键盘 [6] 键");
-                    driver.pressKey(new KeyEvent().withKey(AndroidKey.DIGIT_6));
                     break;
                 case '7':
+                    driver.pressKey(new KeyEvent().withKey(AndroidKey.DIGIT_7));
                     log.info("[调试信息] [digit] 点击 Android 键盘 [7] 键");
 //                    Reporter.log("【调试信息】 [digit] 点击 Android 键盘 [7] 键");
-                    driver.pressKey(new KeyEvent().withKey(AndroidKey.DIGIT_7));
                     break;
                 case '8':
+                    driver.pressKey(new KeyEvent().withKey(AndroidKey.DIGIT_8));
                     log.info("[调试信息] [digit] 点击 Android 键盘 [8] 键");
 //                    Reporter.log("【调试信息】 [digit] 点击 Android 键盘 [8] 键");
-                    driver.pressKey(new KeyEvent().withKey(AndroidKey.DIGIT_8));
                     break;
                 case '9':
+                    driver.pressKey(new KeyEvent().withKey(AndroidKey.DIGIT_9));
                     log.info("[调试信息] [digit] 点击 Android 键盘 [9] 键");
 //                    Reporter.log("【调试信息】 [digit] 点击 Android 键盘 [9] 键");
-                    driver.pressKey(new KeyEvent().withKey(AndroidKey.DIGIT_9));
                     break;
                 case '0':
+                    driver.pressKey(new KeyEvent().withKey(AndroidKey.DIGIT_0));
                     log.info("[调试信息] [digit] 点击 Android 键盘 [0] 键");
 //                    Reporter.log("【调试信息】 [digit] 点击 Android 键盘 [0] 键");
-                    driver.pressKey(new KeyEvent().withKey(AndroidKey.DIGIT_0));
                     break;
                 default:
                     log.info("[调试信息] [digit] [default] 输入参数中包含 [0 - 9] 以外的字符。");
@@ -617,12 +599,6 @@ public class BaseActionUtils {
         log.info("[调试信息] [recordStart]");
         Reporter.log("【调试信息】 [recordStart]");
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
         log.info("[调试信息] [recordStart] [开始录制屏幕]");
         Reporter.log("【调试信息】 [recordStart] [开始录制屏幕]");
         driver.startRecordingScreen();
@@ -637,16 +613,9 @@ public class BaseActionUtils {
         log.info("[调试信息] [recordStop]");
         Reporter.log("【调试信息】 [recordStop]");
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        log.info("[调试信息] [recordStart] [结束录制屏幕]");
-        Reporter.log("【调试信息】 [recordStart] [结束录制屏幕]");
+        log.info("[调试信息] [recordStop] [结束录制屏幕]");
+        Reporter.log("【调试信息】 [recordStop] [结束录制屏幕]");
         String video = driver.stopRecordingScreen();
-
 
         log.info("[调试信息] [recordStop] 执行完毕。");
     }

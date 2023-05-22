@@ -48,7 +48,7 @@ public class LogicAnalysisProcessUtils {
         while (iteratorIffi.hasNext()) {
             log.info("[调试信息] [doIffi] [----------------------------------------]");
             Reporter.log("【调试信息】 [doIffi] [----------------------------------------]");
-            log.info("[调试信息] [whhwAnalysis] [while (iteratorIffi.hasNext())]");
+            log.info("[调试信息] [doIffi] [while (iteratorIffi.hasNext())]");
 
             Map<String, Object> iffiMap = (Map<String, Object>) iteratorIffi.next();
             for (Map.Entry<String, Object> iffiEntry : iffiMap.entrySet()) {

@@ -7,10 +7,7 @@ import com.entity.RemoteUrlEntity;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Reporter;
 
@@ -19,7 +16,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-import static com.common.CacheParamData.caseName;
 import static com.common.CapabilityData.*;
 import static com.common.CommonData.*;
 
@@ -43,7 +39,7 @@ public class AndroidDriverUtils {
     public static AndroidDriver<MobileElement> driver = null;
 
     // 隐式等待
-    private static final long implicitly_wait_time = 20;
+    private static final long implicitly_wait_time = 30;
 
     /**
      * 初始化 Driver，调用 public AndroidDriver<MobileElement> getInitDriver()
@@ -268,34 +264,6 @@ public class AndroidDriverUtils {
         log.info("[调试信息] [getCapabilitiesWithJsonFile] 返回 capabilities 对象，方法执行完毕。");
 
         return capabilities;
-    }
-
-    /**
-     * 退出，并在退出前截图。
-     */
-    public static void errorBeforeExitScreenshot(String fileFolder) {
-        log.info("[调试信息] [errorBeforeExitScreenshot]");
-        Reporter.log("【调试信息】 [errorBeforeExitScreenshot]");
-
-        String fileName = caseName + "_" + "Before-Exit" + ".png";
-        File destFile = new File(fileFolder, fileName);
-        try {
-            if (null != driver) {
-                File sourceFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-                FileUtils.copyFile(sourceFile, destFile);
-                log.info("[调试信息] [errorBeforeExitScreenshot] 截图保存路径：{}{}", fileFolder, fileName);
-                Reporter.log("【调试信息】 [errorBeforeExitScreenshot] 截图保存路径：" + fileFolder + fileName);
-                Thread.sleep(sleepTime);
-            } else {
-                log.info("[调试信息] [errorBeforeExitScreenshot] driver == null.");
-            }
-        } catch (Exception e) {
-            log.info("[调试信息] [errorBeforeExitScreenshot] 打印操作元素失败异常信息：{}", e.toString());
-//            throw new WebDriverException();
-        }
-
-        log.info("[调试信息] [errorBeforeExitScreenshot] “必要元素” 不存在，程序停止运行。（手动抛出 RuntimeException 异常）");
-//        throw new RuntimeException();
     }
 
     /**

@@ -7,9 +7,15 @@ import com.common.CacheParamData;
 import com.entity.CapabilitiesEntity;
 import io.appium.java_client.MobileElement;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriverException;
 import org.testng.Reporter;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
@@ -18,9 +24,10 @@ import static com.common.BaseActionData.ActionOperate.*;
 import static com.common.BaseLocationData.LOCATION_ELEMENT;
 import static com.common.BaseLocationData.LocationWay.*;
 import static com.common.CacheParamData.CacheParam.PARAM_STRING;
+import static com.common.CacheParamData.caseName;
 import static com.common.CacheParamData.selectResultCacheString;
-import static com.common.CommonData.isRequisiteFlag;
-import static com.common.CommonData.testReportFolder;
+import static com.common.CommonData.*;
+import static com.utils.AndroidDriverUtils.driver;
 import static com.utils.BaseActionDBOperateUtils.dbOperate;
 import static com.utils.BaseActionUtils.*;
 import static com.utils.BaseLocationUtils.*;
@@ -128,14 +135,15 @@ public class CoreAnalysisEngineUtils {
         Reporter.log("【调试信息】 [doLocation] [requisite = " + requisite + "]");
         Reporter.log("【调试信息】 [doLocation] [paramType = " + paramType + "]");
 
-        if (StringUtils.isEmpty(element) && StringUtils.isEmpty(way) && StringUtils.isEmpty(paramType)) {
-            log.info("[调试信息] [doLocation] 获取到的 [element == way == paramType == null]，doLocation() 方法终止执行。[return null;]");
-            return null;
-        }
 
         if (StringUtils.isEmpty(way)) {
             log.info("[调试信息] [doLocation] 获取到的 [way == null]，doLocation() 方法终止执行。[return null;]");
             Reporter.log("【调试信息】 [doLocation] 获取到的 [way == null]，doLocation() 方法终止执行。[return null;]");
+        }
+
+        if (StringUtils.isEmpty(element) && StringUtils.isEmpty(paramType)) {
+            log.info("[调试信息] [doLocation] 获取到的 [element == null] 且 [paramType == null]，doLocation() 方法终止执行。[return null;]");
+            return null;
         }
 
         MobileElement mobileElement = null;
@@ -143,6 +151,7 @@ public class CoreAnalysisEngineUtils {
         if (null != element) {
             log.info("[调试信息] [doLocation] 即将开始执行 switch(way.toUpperCase()) 方法，匹配元素的定位方式：");
             Reporter.log("【调试信息】 [doLocation] 即将开始匹配元素的定位方式：");
+
             switch (way.toUpperCase()) {
                 case "ID":
                 case "XPATH":
@@ -150,37 +159,73 @@ public class CoreAnalysisEngineUtils {
                 case BY_XPATH:
                     log.info("[调试信息] [doLocation] [switch] [BY_ID || BY_XPATH] 调用 findElement({}) 获取元素：", element);
                     mobileElement = findElementByBase(element);
-                    // 判断 “必要元素” 是否存在，不存在则截屏并退出。（存在则什么都不做）
-                    requisiteElementIsExist(mobileElement, isRequisiteFlag, requisite);
                     break;
 
                 case BY_LINK_TEXT:
                     log.info("[调试信息] [doLocation] [switch] [BY_LINK_TEXT] 调用 findElementByLinkText({}) 获取元素：", element);
                     mobileElement = findElementByLinkText(element);
-                    requisiteElementIsExist(mobileElement, isRequisiteFlag, requisite);
                     break;
 
                 case BY_TEXT:
                     log.info("[调试信息] [doLocation] [switch] [BY_TEXT] 调用 findElementByText({}) 获取元素：", element);
                     mobileElement = findElementByText(element);  // 判断是否存在，如果元素不存在，则返回 null
-                    requisiteElementIsExist(mobileElement, isRequisiteFlag, requisite);
                     break;
 
                 case BY_CLASS_NAME:
                     log.info("[调试信息] [doLocation] [switch] [BY_CLASS_NAME] 调用 findElementByClassName({}) 获取元素：", element);
                     mobileElement = findElementByClassName(element);
-                    requisiteElementIsExist(mobileElement, isRequisiteFlag, requisite);
                     break;
 
                 case BY_UI_SELECTOR:
                     log.info("[调试信息] [doLocation] [switch] [BY_UI_SELECTOR] 调用 findElementByUiSelectorWithText({}) 获取元素：", element);
                     mobileElement = findElementByUiSelectorWithText(element);
-                    requisiteElementIsExist(mobileElement, isRequisiteFlag, requisite);
                     break;
 
                 default:
                     log.info("[调试信息] [doLocation] [default] switch 语句中没有匹配到 [way = {}]，请确认 [yaml] 文件中的 way 元素填写是否正确。", way);
                     Reporter.log("【调试信息】 [doLocation] [default] switch 语句中没有匹配到 [way = " + way + "]，请确认 [yaml] 文件中的 way 元素填写是否正确。");
+            }
+
+            if (StringUtils.isEmpty(requisite)) {
+                requisite = "N";
+            }
+
+            /**
+             * 判断 “必要元素” 是否存在，不存在则截屏并退出，存在则什么都不做。
+             */
+            if (null == mobileElement && isRequisiteFlag == 0 && requisite.toUpperCase().equals(_Y)) {
+                log.info("[调试信息] [doLocation] 赋值 [mobileElement = null], [isRequisiteFlag = 0], [requisite = Y]。");
+
+                String fileName = caseName + "_" + "Before-Exit" + ".png";
+                File destFile = new File(testReportFolder, fileName);
+
+                if (null != driver) {
+                    File sourceFile = null;
+                    try {
+//                        sourceFile = driver.getScreenshotAs(OutputType.FILE);
+                        sourceFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+                    } catch (WebDriverException e) {
+                        throw new WebDriverException(e);
+                    }
+
+                    try {
+                        FileUtils.copyFile(sourceFile, destFile);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    try {
+                        Thread.sleep(sleepTime);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    log.info("[调试信息] [doLocation] 截图保存路径：{}{}", testReportFolder, fileName);
+                    Reporter.log("【调试信息】 [doLocation] 截图保存路径：" + testReportFolder + fileName);
+                }
+
+                log.info("[调试信息] [doLocation] “必要元素” 不存在，程序停止运行。（手动抛出 RuntimeException 异常）");
+                throw new RuntimeException();
             }
         } else {
             /**
