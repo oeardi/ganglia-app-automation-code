@@ -1,49 +1,49 @@
 name: start_home
 description: start_home
 modules:
-  - page: Page
-  - location:
-      - element: "com.android.permissioncontroller:id/only_button"
-      - way: byId
-      - requisite:
-      - paramType:
-  - action:
-      - operate: click
-      - param:
+#  - page: Page
+#  - location:
+#      - element: "com.android.permissioncontroller:id/only_button"
+#      - way: byId
+#      - requisite:
+#      - paramType:
+#  - action:
+#      - operate: click
+#      - param:
+
+#  - page: Page
+#  - location:
+#      - element: "com.android.permissioncontroller:id/button"
+#      - way: byId
+#      - requisite:
+#      - paramType:
+#  - action:
+#      - operate: click
+#      - param:
+
+#  - page: Page
+#  - location:
+#      - element: "Login"
+#      - way: byId
+#      - requisite:
+#      - paramType:
+#    action:
+#      - operate: click
+#      - param:
+
+#  - page: Page
+#  - location:
+#      - element: "merchant.service.alpha:id/layout"
+#      - way: byId
+#      - requisite:
+#      - paramType:
+#  - action:
+#      - operate: click
+#      - param:
 
   - page: Page
   - location:
-      - element: "com.android.permissioncontroller:id/button"
-      - way: byId
-      - requisite:
-      - paramType:
-  - action:
-      - operate: click
-      - param:
-
-  - page: Page
-  - location:
-      - element: "Login"
-      - way: byId
-      - requisite:
-      - paramType:
-    action:
-      - operate: click
-      - param:
-
-  - page: Page
-  - location:
-      - element: "merchant.service.alpha:id/layout"
-      - way: byId
-      - requisite:
-      - paramType:
-  - action:
-      - operate: click
-      - param:
-
-  - page: Page
-  - location:
-      - element: "//*[@text='Enter number']"
+      - element: "//*[@text='Enter phone number']"
       - way: byXpath
       - requisite: Y
       - paramType:
@@ -53,17 +53,17 @@ modules:
 
   - page: Page
   - location:
-      - element: "//*[@text='Enter digit']"
+      - element: "//*[@text='Enter 6-digit password']"
       - way: byXpath
       - requisite: Y
       - paramType:
   - action:
       - operate: sendKeys
-      - param: "202111"
+      - param: "147258"
 
   - page: Page
   - location:
-      - element: "//*[@text='NEXT']"
+      - element: "//*[@text='Log In']"
       - way: byXpath
       - requisite:
       - paramType:
@@ -71,12 +71,6 @@ modules:
       - operate: click
       - param:
 
-  - page: Page
-  - location:
-      - element: "merchant.service.alpha:id/action"
-      - way: byId
-      - requisite:
-      - paramType:
   - action:
-      - operate: click
-      - param:
+      - operate: waiting
+      - param: "3000"

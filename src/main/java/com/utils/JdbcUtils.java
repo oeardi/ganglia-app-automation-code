@@ -17,6 +17,9 @@ import java.util.Properties;
 @Slf4j
 public class JdbcUtils {
 
+    private JdbcUtils() {
+    }
+
     public static void myClose(Statement statement, Connection connection) {
         log.info("[调试信息] [myClose]");
 

@@ -20,6 +20,9 @@ import static com.common.CacheParamData.CacheParam.PARAM_STRING;
 @Slf4j
 public class BaseAssertUtils {
 
+    private BaseAssertUtils() {
+    }
+
     /**
      * 断言部分
      */

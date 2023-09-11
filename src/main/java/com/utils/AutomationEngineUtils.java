@@ -40,12 +40,6 @@ public class AutomationEngineUtils {
     private AutomationEngineUtils() {
     }
 
-    private static AutomationEngineUtils automationEngineUtils = new AutomationEngineUtils();
-
-    public static AutomationEngineUtils getAutomationEngineUtils() {
-        return automationEngineUtils;
-    }
-
     /**
      * 自动解析并执行 case 内容
      *

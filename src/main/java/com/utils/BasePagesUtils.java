@@ -14,6 +14,9 @@ import static com.pages.factory.PageFactory.factoryGetPage;
 @Slf4j
 public class BasePagesUtils {
 
+    private BasePagesUtils() {
+    }
+
     /**
      * 解析并执行 yaml 中的 page 页面信息。
      * <p>

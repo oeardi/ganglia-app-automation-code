@@ -4,7 +4,7 @@
 <suite name="TEST">
 
     <test name="start_home">
-        <parameter name="yamlFile" value="/test-case-yaml/start_home.yaml"/>
+        <parameter name="yamlFile" value="/test-case-yaml/demo/start_home.yaml"/>
         <classes>
             <class name="com.cases.AutomatedTest"></class>
         </classes>

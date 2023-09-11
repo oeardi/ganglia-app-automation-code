@@ -30,12 +30,6 @@ public class AndroidDriverUtils {
     private AndroidDriverUtils() {
     }
 
-    private static AndroidDriverUtils androidDriverUtils = new AndroidDriverUtils();
-
-    public static AndroidDriverUtils getAndroidDriverUtils() {
-        return androidDriverUtils;
-    }
-
     public static AndroidDriver<MobileElement> driver = null;
 
     // 隐式等待

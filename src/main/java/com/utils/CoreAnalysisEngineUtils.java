@@ -27,6 +27,7 @@ import static com.common.CacheParamData.CacheParam.PARAM_STRING;
 import static com.common.CacheParamData.caseName;
 import static com.common.CacheParamData.selectResultCacheString;
 import static com.common.CommonData.*;
+import static com.utils.AndroidDriverUtils.closeApp;
 import static com.utils.AndroidDriverUtils.driver;
 import static com.utils.BaseActionDBOperateUtils.dbOperate;
 import static com.utils.BaseActionUtils.*;
@@ -45,12 +46,6 @@ import static com.utils.BaseLocationUtils.*;
 public class CoreAnalysisEngineUtils {
 
     private CoreAnalysisEngineUtils() {
-    }
-
-    private static CoreAnalysisEngineUtils coreAnalysisEngineUtils = new CoreAnalysisEngineUtils();
-
-    public static CoreAnalysisEngineUtils getCoreAnalysisEngineUtils() {
-        return coreAnalysisEngineUtils;
     }
 
     /**
@@ -224,6 +219,7 @@ public class CoreAnalysisEngineUtils {
                     Reporter.log("【调试信息】 [doLocation] 截图保存路径：" + testReportFolder + fileName);
                 }
 
+                closeApp();
                 log.info("[调试信息] [doLocation] “必要元素” 不存在，程序停止运行。（手动抛出 RuntimeException 异常）");
                 throw new RuntimeException();
             }

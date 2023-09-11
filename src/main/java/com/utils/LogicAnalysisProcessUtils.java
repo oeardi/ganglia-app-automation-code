@@ -24,6 +24,9 @@ import static com.utils.CoreAnalysisEngineUtils.doLocation;
 @Slf4j
 public class LogicAnalysisProcessUtils {
 
+    private LogicAnalysisProcessUtils() {
+    }
+
     /**
      * 解析 iffi 相关信息
      *

@@ -3,7 +3,6 @@ package com.utils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.testng.Reporter;
-import org.testng.annotations.Test;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -202,7 +201,7 @@ public class BaseActionDBOperateUtils {
                 }
 
                 selectResultCacheString = resultSet.getString(1);
-                log.info("[调试信息] [selectOne] 输出查询结果：[{} = {}]",part1, selectResultCacheString);
+                log.info("[调试信息] [selectOne] 输出查询结果：[{} = {}]", part1, selectResultCacheString);
                 Reporter.log("[调试信息] [selectOne] 输出查询结果：[" + part1 + " = " + selectResultCacheString + "]");
 
                 log.info("[调试信息] [selectOne] SELECT 执行成功。");

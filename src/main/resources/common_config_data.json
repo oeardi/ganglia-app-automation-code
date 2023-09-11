@@ -1,5 +1,5 @@
 {
-  "findElementLoopCount": 1,
+  "findElementLoopCount": 0,
   "operateElementLoopCount": 1,
   "sleepTime": 1000
 }

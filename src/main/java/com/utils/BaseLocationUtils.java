@@ -27,6 +27,9 @@ import static com.utils.AndroidDriverUtils.driver;
 @Slf4j
 public class BaseLocationUtils {
 
+    private BaseLocationUtils() {
+    }
+
     /**
      * 根据 By，获取元素，底层调用 driver.findElement(by) 方法。
      *

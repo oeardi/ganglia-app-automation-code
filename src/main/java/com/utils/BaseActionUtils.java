@@ -32,6 +32,9 @@ import static com.utils.BaseLocationUtils.*;
 @Slf4j
 public class BaseActionUtils {
 
+    private BaseActionUtils() {
+    }
+
     /**
      * 点击
      *
