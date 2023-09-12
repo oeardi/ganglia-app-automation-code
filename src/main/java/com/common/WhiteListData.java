@@ -22,12 +22,10 @@ public class WhiteListData {
     public static final String P_B_WHITE_LIST_FILE = "/element_white_list/P_B_White_List.json";
     public static final String DEFAULT_WHITE_LIST_FILE = "/element_white_list/Default_White_List.json";
 
-    public static final String N_P = "np";
-    public static final String N_P_V_367 = "NB_v_367";
-    public static final String N_P_V_XXX = "NB_v_xxx";
-    public static final String N_B = "nb";
-    public static final String P_P = "pp";
-    public static final String P_B = "pb";
+    public static final String N_P = "NP";
+    public static final String N_B = "NB";
+    public static final String P_P = "PP";
+    public static final String P_B = "PB";
 
-    public static final String DEFAULT = "default";
+    public static final String DEFAULT = "DEFAULT";
 }
