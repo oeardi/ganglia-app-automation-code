@@ -188,7 +188,7 @@ public class CoreAnalysisEngineUtils {
             /**
              * 判断 “必要元素” 是否存在，不存在则截屏并退出，存在则什么都不做。
              */
-            if (null == mobileElement && isRequisiteFlag == 0 && requisite.toUpperCase().equals(_Y)) {
+            if (null == mobileElement && isRequisiteFlag == 0 && requisite.equalsIgnoreCase(Y)) {
                 log.info("[调试信息] [doLocation] 赋值 [mobileElement = null], [isRequisiteFlag = 0], [requisite = Y]。");
 
                 String fileName = caseName + "_" + "Before-Exit" + ".png";

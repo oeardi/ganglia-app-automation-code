@@ -20,7 +20,7 @@ public class ResourceBundleUtils {
      * @param propertiesFile 如果 propertiesFile 传入 “default”，则默认读取 resources/devices/devices.properties 文件。
      */
     public ResourceBundle getPropertiesFileValue(String propertiesFile) {
-        if (null == propertiesFile || propertiesFile.length() == 0) {
+        if (null == propertiesFile || propertiesFile.isEmpty()) {
             log.info("[调试信息] [getPropertiesFileValue] 输入的 propertiesFile 参数是一个空值。");
             return null;
         } else {

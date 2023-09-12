@@ -8,7 +8,6 @@ import com.aventstack.extentreports.model.TestAttribute;
 import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 import com.aventstack.extentreports.reporter.configuration.ChartLocation;
 import com.aventstack.extentreports.reporter.configuration.Theme;
-import com.common.CommonData;
 import org.testng.*;
 import org.testng.xml.XmlSuite;
 
@@ -43,7 +42,7 @@ public class ExtentTestNGIReporterListener implements IReporter {
         for (ISuite suite : suites) {
             Map<String, ISuiteResult> result = suite.getResults();
             // 如果 suite 里面没有任何用例，直接跳过，不在报告里生成
-            if (result.size() == 0) {
+            if (result.isEmpty()) {
                 continue;
             }
             // 统计 suite 下的成功、失败、跳过的总用例数
@@ -167,7 +166,7 @@ public class ExtentTestNGIReporterListener implements IReporter {
                 for (Object param : parameters) {
                     name += param.toString();
                 }
-                if (name.length() > 0) {
+                if (!name.isEmpty()) {
                     if (name.length() > 50) {
                         name = name.substring(0, 49) + "...";
                     }

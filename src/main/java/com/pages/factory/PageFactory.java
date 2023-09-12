@@ -20,7 +20,7 @@ public class PageFactory {
      */
     public static IPage factoryGetPage(String name) {
 //        log.info("[调试信息] [{}]", Thread.currentThread().getStackTrace()[1].getMethodName());
-        if (name == null || name.length() == 0) {
+        if (name == null || name.isEmpty()) {
             log.info("[调试信息] [factoryGetPage] 传入 name 参数为空。[return null;]");
             return null;
         }

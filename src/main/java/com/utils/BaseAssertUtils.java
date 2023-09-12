@@ -98,7 +98,7 @@ public class BaseAssertUtils {
             /**
              * 判定条件
              */
-            if (null == conditionString || conditionString.equals(BaseAssertData.equalsTo)) {
+            if (null == conditionString || conditionString.equals(BaseAssertData.EQUALS_TO)) {
                 log.info("[调试信息] [doAssert] 触发判定条件：[=]");
                 Reporter.log("【调试信息】 [doAssert] 触发判定条件：[=]");
                 Assert.assertEquals(result, expect);

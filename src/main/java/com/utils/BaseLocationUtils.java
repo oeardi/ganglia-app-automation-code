@@ -296,7 +296,7 @@ public class BaseLocationUtils {
      */
     public static void requisiteElementIsExist(MobileElement mobileElement, int isRequisiteFlag, String requisite) {
 
-        if (null == mobileElement && isRequisiteFlag == 0 && requisite.toUpperCase().equals(_Y)) {
+        if (null == mobileElement && isRequisiteFlag == 0 && requisite.equalsIgnoreCase(Y)) {
             log.info("[调试信息] [requisiteElementIsExist] 赋值 [mobileElement = null], [isRequisiteFlag = 0], [requisite = Y]。");
 
             String fileName = caseName + "_" + "Before-Exit" + ".png";

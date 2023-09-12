@@ -33,7 +33,7 @@ public class AndroidDriverUtils {
     public static AndroidDriver<MobileElement> driver = null;
 
     // 隐式等待
-    private static final long implicitly_wait_time = 30;
+    private static final long IMPLICITLY_WAIT_TIME = 30;
 
     /**
      * 初始化 Driver，调用 public AndroidDriver<MobileElement> getInitDriver()
@@ -60,7 +60,7 @@ public class AndroidDriverUtils {
         }
 
         // implicitlyWait 隐式等待
-        driver.manage().timeouts().implicitlyWait(implicitly_wait_time, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(IMPLICITLY_WAIT_TIME, TimeUnit.SECONDS);
 //        String context = driver.getContext();
 //        String pageSource = driver.getPageSource();
 //        String currentPackage = driver.getCurrentPackage();

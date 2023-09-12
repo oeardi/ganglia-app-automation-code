@@ -6,10 +6,10 @@ package com.common;
 public class BaseIffiData {
 
     public interface Asserts {
-        String CONTAINT_asserts = "asserts";
-        String greateThan = ">";
-        String lessThan = "<";
-        String equals = "=";
+        String CONTAINT_ASSERTS = "asserts";
+        String GREATE_THAN = ">";
+        String LESS_THAN = "<";
+        String EQUALS_TO = "=";
     }
 
 }

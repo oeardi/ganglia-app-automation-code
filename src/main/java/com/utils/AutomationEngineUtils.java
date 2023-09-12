@@ -96,7 +96,7 @@ public class AutomationEngineUtils {
                 /**
                  * 解析 whiteList 信息
                  */
-                if (entry1.getKey().contains(CONTAINT_whiteListFile)) {
+                if (entry1.getKey().contains(CONTAINT_WHITE_LIST_FILE)) {
 
                     String whiteListFile = (String) entry1.getValue();
                     log.info("[调试信息] [uiAtuo] 输出 [whiteListFile = {}]", whiteListFile);

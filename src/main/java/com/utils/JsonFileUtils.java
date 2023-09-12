@@ -84,9 +84,8 @@ public class JsonFileUtils {
             e.printStackTrace();
             log.info("[调试信息] [getMustache] 方法发生空指针异常，请确认方法入参 {} 是否正确。", jsonFile);
         }
-        Mustache mustache = mustacheFactory.compile(filePath);
 
-        return mustache;
+        return mustacheFactory.compile(filePath);
     }
 
 }

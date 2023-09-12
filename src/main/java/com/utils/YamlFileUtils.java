@@ -25,7 +25,7 @@ public class YamlFileUtils {
      */
     public <T> Object getMapWithYamlFile(String yamlFile, Class clazz) {
         log.info("[调试信息] [getMapWithYamlFile]");
-        if (yamlFile == null || yamlFile.length() == 0) {
+        if (yamlFile == null || yamlFile.isEmpty()) {
             log.info("[调试信息] [getMapWithYamlFile] 传入 yamlFile 参数为空。[return null;]");
             return null;
         } else {

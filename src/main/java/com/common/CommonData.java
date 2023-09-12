@@ -39,7 +39,7 @@ public class CommonData {
     /**
      * requisite，标识为 “是否必须元素”。如果是必须元素（requisite =Y），定位不到元素时，程序会调用 quit() 方法停止运行。
      */
-    public static final String _Y = "Y";
+    public static final String Y = "Y";
 
     public static String testReportFolder = "test-report-output/report-" + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss") + "/";
 
