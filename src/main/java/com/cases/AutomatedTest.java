@@ -1,7 +1,5 @@
 package com.cases;
 
-import com.utils.AndroidDriverUtils;
-import com.utils.AutomationEngineUtils;
 import com.utils.YamlFileUtils;
 import org.testng.Reporter;
 import org.testng.annotations.AfterClass;
@@ -12,6 +10,8 @@ import org.testng.annotations.Test;
 import java.util.Map;
 
 import static com.utils.AndroidDriverUtils.closeApp;
+import static com.utils.AndroidDriverUtils.initDriver;
+import static com.utils.AutomationEngineUtils.uiAuto;
 
 /**
  * 测试用例
@@ -23,7 +23,7 @@ public class AutomatedTest {
     @BeforeClass
     public void beforeClass() {
         System.out.println("【TEST CASE】 [beforeClass]。");
-        AndroidDriverUtils.initDriver();
+        initDriver();
     }
 
     @Parameters("yamlFile")
@@ -32,7 +32,7 @@ public class AutomatedTest {
         Reporter.log("【TEST CASE】 [testAutomated] 测试用例开始执行：");
 
         Map<String, Object> yamlToMap = (Map<String, Object>) new YamlFileUtils().getMapWithYamlFile(yamlFile, Map.class);
-        AutomationEngineUtils.uiAtuo(yamlToMap);
+        uiAuto(yamlToMap);
 
         Reporter.log("【TEST CASE】 [testAutomated] 测试用例执行完毕。");
     }
